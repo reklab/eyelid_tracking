@@ -1,10 +1,11 @@
 % Blink and eye-openness tracking ==== complete code
 
-%% Phase 1 - loading tiff files with/without conversion to jpeg
+%% Phase 1 - loading .tiff files with/without conversion to jpeg
 
 % if no conversion is needed - please input conversion == 0; otherwise, 1.
 
 answer{1} = '2';
+fps = 500;
 
 while answer{1} ~= '0' && answer{1} ~= '1'
     prompt = {'Conversion from tiff to jpeg required? Enter 0/1',...
@@ -16,8 +17,8 @@ while answer{1} ~= '0' && answer{1} ~= '1'
     definput = {'0','0','your_file','1','0'};
     answer = inputdlg(prompt,title,dims,definput);
     filename2 = answer{3};
-    RightLeft = answer{4};
-    vidYN = answer{5};
+    RightLeft = str2double(answer{4});
+    vidYN = str2double(answer{5});
 end
 
 % loading the files:
@@ -106,7 +107,6 @@ iter = 15;
 fr = 1;
 
 %% Phase 3 - Active contour tracking
-
 
 if vidYN == 1
     
@@ -346,7 +346,6 @@ end
 
 % Converting NaNs into actual data
 
-fps = 500;
 t = 1/fps:1/fps:(length(eyeSig)/fps);
 tOdd = t(1:2:end-5);
 

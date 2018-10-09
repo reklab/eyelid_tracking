@@ -24,7 +24,7 @@ function [minor,ctr,area,contour,inBlink,isClosed] = contour_track(frame, maxAre
 %
 % © Guy Tsror, McGill Universty, 2018
 
-%%
+%% Preprocessing
 
 % defining relevant pixels:
 
@@ -43,12 +43,14 @@ I = bwmorph(tmp2,'close');
 
 I2 = uint8(255 * I);
 
-del I1 tmp1 tmp2 I;
+clear I1 tmp1 tmp2 I;
 
 % Blurring image with a gaussian filter to lose the smaller irrelevant
 % edges
 
 B = imgaussfilt(I2,6);
+
+%% Tracking
 
 % defining the current contour based on previous mask. Activecontour uses
 % the number of iterations predefined with 'iter', and uses the prevMask as

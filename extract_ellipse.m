@@ -18,11 +18,13 @@ function [minor, ctr, ind, flag, area] = extract_ellipse(origAngle, maxArea, tot
 %
 % © Guy Tsror, McGill University, 2018
 
+
+%% 
+
 flag=0;
 j=1;
 ind = 0;
 prevCenter = [centerXrange(1)+50, centerYrange(1)+25];
-
 
 if totElpsFound > 0
     while j <= totElpsFound
@@ -36,6 +38,7 @@ if totElpsFound > 0
                 && newCenter(2) >= zeroCenter(2)-25 && newCenter(2) <= (zeroCenter(2)+50)))...
                 && area<=1.333*maxArea ...
                 && (angle <= (origAngle+10) || angle > (origAngle - 10))
+            
             % the above condition checks all features to be within range
             % from original eye features
             

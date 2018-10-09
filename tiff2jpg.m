@@ -7,7 +7,9 @@ function [folderout, i, sortedStruct] = tiff2jpg()
 % directory, with the same name but with a suffix "_jpegs"
 
 %% Getting the required path and filename:
-folder = uigetdir('D:\Guy\Dropbox (NRP)\Diego_Guy\New videos\3-9-2018\animal_1\video_1');
+
+% folder = uigetdir('D:\Guy\Dropbox (NRP)\Diego_Guy\New videos\3-9-2018\animal_1\video_1');
+folder = uigetdir('C:\');
 folderout = [folder '_jpegs'];
 all_files = dir([folder '/*.tiff']);
 file_prefix_list = zeros(length(all_files),1);

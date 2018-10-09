@@ -14,6 +14,7 @@ function [] = plot_ellipse(stats,ind,frame,contour,trackYN)
 %
 % © Guy Tsror, McGill Universty, 2018
 
+%%
 
 if trackYN == 1
     
