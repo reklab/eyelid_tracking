@@ -1,4 +1,4 @@
-function [nBlinks, blink_inds] = mark_blinks(tt,sig,plt,th_pct)
+function [nBlinks, blink_inds] = mark_blinks(tt,sig,plt)
 
 % This function detects blink locations on the output signal, and returns
 % the number of blinks the algorithm detected, and the locations of the
@@ -7,13 +7,26 @@ function [nBlinks, blink_inds] = mark_blinks(tt,sig,plt,th_pct)
 % could be zeros if plotting is not required.
 % sig - the eyelid tracking output signal
 % plt - a binary 1/0 to indicate if plotting is required
-% th_pct - indicator of the percentage off the median to threshold the
-% eyelids for blinks. Default setting is 25%
+%
+% The function works as follows: inspecting the signals's histogram, it
+% finds a point beyond the tail of the histogram (defined by the 10th bin
+% with 0 values in it). This point is the threshold for blinks. Any peaks
+% detected beyond this point, with minimal peak distance of 5 time-units
+% away, are considered blinks.
+%
+% Copyrights Guy Tsror, McGill University, 2018
 
-th_pct = 25;
 flip_sig = -1*sig;
-mdn = median(flip_sig);
-threshold = mdn-mdn/(100/th_pct);
+nbins = 500;
+
+% finding the histogram counts for the flipped signals
+[N,edges] = histcounts(flip_sig,nbins);
+
+% defining the threshold - taking the 10th empty bin's edge, and setting as
+% the threshold 
+inds = find(N==0);
+threshold = edges(inds(10));
+
 [pks,locs,~,~] = findpeaks(flip_sig,'MinPeakHeight'...
     ,threshold,'MinPeakDistance',5);
 
