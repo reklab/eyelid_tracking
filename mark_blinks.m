@@ -22,10 +22,18 @@ nbins = 500;
 % finding the histogram counts for the flipped signals
 [N,edges] = histcounts(flip_sig,nbins);
 
-% defining the threshold - taking the 10th empty bin's edge, and setting as
-% the threshold 
-inds = find(N==0);
-threshold = edges(inds(10));
+% defining the threshold - taking the 10th empty bin's edge after the histogram peak
+% and setting as the threshold 
+
+inds = find(N==0); % finding all empty bins
+[~, maxind] = max(N); % index of maximum point in histogram
+for i = 1:length(inds)
+    if inds(i) > maxind 
+        threshold = edges(inds(i+10));
+        break;
+    end
+end
+ 
 
 [pks,locs,~,~] = findpeaks(flip_sig,'MinPeakHeight'...
     ,threshold,'MinPeakDistance',5);
@@ -33,13 +41,24 @@ threshold = edges(inds(10));
 % Optional plotting
 if plt == 1
     figure()
+    subplot 211
     plot(tt,flip_sig,'k'); 
     hold on;
     scatter(tt(locs),pks,'r','*')
     xlabel('Time [sec]')
     ylabel('Minor Axis Length [px]');
+    xlim([0 tt(end)]);
     grid on;
     hold off;
+    
+    subplot 212
+    hist(flip_sig,nbins);
+    hold on;
+    line([threshold threshold], [0 max(N)+50],'linewidth',3,'color','r')
+    ylim([0 max(N)+50]);
+    xlabel('-1*Amplitude');
+    ylabel('Count');
+    grid on;
 end
 
 nBlinks = length(pks);
