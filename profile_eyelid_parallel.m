@@ -86,6 +86,7 @@ ctrSigY = zeros(1,frames);
 tic
 parfor i = 1:nPars
     
+    frSk = -1; skipLen = 0;
     tmp = zeros(1, lag_length);
     % Phase 2.5 - Processing of first frame for each partitions    
     % User to define the first area on first frame. This will be used in all
@@ -110,10 +111,10 @@ parfor i = 1:nPars
     fr = 1;
     
 %     while fr < fr_start(i)+lag_length-1 % Used to be -5// should verify ok
-    while fr < lag_length-1 % Used to be -5// should verify ok
+    while fr < lag_length % Used to be -5// should verify ok
         % loading the next relevant frame
         
-        frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.jpeg']);
+        frameIn = imread([folder '\' sortedStruct(fr_start(i)+fr-1).name(1:end-5) '.jpeg']);
         frame = imcrop(frameIn,rect); 
 %         clear frameIn
     
@@ -130,7 +131,7 @@ parfor i = 1:nPars
         % Dealing with complete blinks:
         
         if inBlink == 1 && isClosed == 1
-            
+ 
             % in case both of these are flagged, our eye is entirely
             % closed and a skip ahead is required
             
@@ -152,7 +153,7 @@ parfor i = 1:nPars
                 if isempty(tmpMinAx) == 0
                     % meaning, there was an ellipse found (area non zero)
 %                     eyeSig(i,frSk) = tmpMinAx;
-                      tmp(fr) = tmpMinAx;
+                      tmp(frSk) = tmpMinAx;
 %                     areaSig(frSk) = tmpCurArea;
 %                     ctrSigX(frSk) = prevCenter(1);
 %                     ctrSigY(frSk) = prevCenter(2);
@@ -160,7 +161,7 @@ parfor i = 1:nPars
                     % meaning, no ellipse was detected -> area is zero and eye
                     % is completley closed (axis = 0)
 %                     eyeSig(i,frSk) = 0;
-                      tmp(fr) = 0;
+                      tmp(frSk) = 0;
 %                     areaSig(frSk) = 0;                    
 %                     ctrSigX(frSk) = prevCenter(1);
 %                     ctrSigY(frSk) = prevCenter(2);
@@ -176,26 +177,29 @@ parfor i = 1:nPars
             prevMask = zeroMask;
             prevCenter = curCenter;
             %clear frameTmp
-            
+%             
         end        
 
         
-        % Dealing with empty axes:
-        if isempty(minorAxis) == 0
-            % meaning, there was an ellipse found (area non zero)
-%             eyeSig(i,fr) = minorAxis;
-            tmp(fr) = minorAxis;
-%             areaSig(fr) = curArea;
-%             ctrSigX(fr) = prevCenter(1);
-%             ctrSigY(fr) = prevCenter(2);
-        else
-            % meaning, no ellipse was detected -> area is zero and eye
-            % is completley closed (axis = 0)
-%             eyeSig(i,fr) = 0;
-            tmp(fr) = 0;
-%             areaSig(fr) = 0;
-%             ctrSigX(fr) = prevCenter(1);
-%             ctrSigY(fr) = prevCenter(2);
+        if frSk ~= fr - skipLen % if this is the case, it means that it's not right after a full blink process
+            % Dealing with empty axes:
+            if isempty(minorAxis) == 0
+                % meaning, there was an ellipse found (area non zero)
+                %             eyeSig(i,fr) = minorAxis;
+                tmp(fr) = minorAxis;
+                %             areaSig(fr) = curArea;
+                %             ctrSigX(fr) = prevCenter(1);
+                %             ctrSigY(fr) = prevCenter(2);
+            else
+                % meaning, no ellipse was detected -> area is zero and eye
+                % is completley closed (axis = 0)
+                %             eyeSig(i,fr) = 0;
+                tmp(fr) = 0;
+                %             areaSig(fr) = 0;
+                %             ctrSigX(fr) = prevCenter(1);
+                %             ctrSigY(fr) = prevCenter(2);
+                
+            end
         end
  
         fr = fr + 2;
