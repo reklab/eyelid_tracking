@@ -48,7 +48,7 @@ end
 %% Phase 1.5 - Dividing the signal to nPars partitions
 
 disp('Dont forget to define number of Par-fors!');
-
+nPars = 3;
 lag_length = floor(frames/nPars);
 % defining the starting points for each lag:
 fr_start = ones(1,nPars);
@@ -131,7 +131,6 @@ parfor i = 1:nPars
         % Dealing with complete blinks:
         
         if inBlink == 1 && isClosed == 1
- 
             % in case both of these are flagged, our eye is entirely
             % closed and a skip ahead is required
             
@@ -139,10 +138,14 @@ parfor i = 1:nPars
             skipLen = 140;
             tmpPrvMsk = zeroMask;
             tmpIter = 200;
+%             
+%             [tmp] = process_full_blink(prevCenter,skipLen,zeroMask,origAngle,...
+%                 zeroCenter,rect,fr,folder,sortedStruct,tmp,HSVranges,maxArea,inBlink);
             
+           
             for frSk = (skipLen+fr):-2:fr
 
-                frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.jpeg']);
+                frameInTmp = imread([folder '\' sortedStruct(fr_start(i)+frSk-1).name(1:end-5) '.jpeg']);
                 frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
 %                 clear frameInTmp
                 
@@ -224,7 +227,7 @@ end
 
 % Converting NaNs into actual data
 
-t = 1/fps:1/fps:(length(eyeSig)/fps);
+t = 1/fps:1/fps:frames/fps;
 tOdd = t(1:2:end-5);
 
 eyeSig_final = naninterp(eyeSig_combined(1:2:end-5));
