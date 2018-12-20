@@ -1,4 +1,4 @@
-function [minor,ctr,area,contour,inBlink,isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, plotYN, inBlink, iter, zeroCenter, HSVranges)
+function [minor,ctr,area,contour,inBlink,isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, plotYN, inBlink, iter, zeroCenter, HSVranges, gs)
 
 % This function uses the built in activecontour function from Matlab's
 % image processing toolbox, to track the edges of a rodent in a video
@@ -28,12 +28,16 @@ function [minor,ctr,area,contour,inBlink,isClosed] = contour_track(frame, maxAre
 
 % defining relevant pixels:
 
-HSVfr = relevant_eye(frame, HSVranges);
+if strcmp(gs,'RGB')==1
+    HSVfr = relevant_eye(frame, HSVranges);
     
 % Conversion to grayscale:
 
-I1 = rgb2gray(HSVfr);
- 
+    I1 = rgb2gray(HSVfr);
+else
+    HSVfr = relevant_eye_gs(frame, HSVranges);
+    I1 = HSVfr;
+end
 % Morphologically closing, opening and closing again, to reduce gaps
 % between relevant pixels and remove outliers
 

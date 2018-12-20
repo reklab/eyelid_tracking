@@ -18,14 +18,16 @@ while answer{1} ~= '0' && answer{1} ~= '1'
     prompt = {'Conversion from tiff to jpeg required? Enter 0/1',...
         'ROI already set? Enter 1/0','Output file name'...
         'Right or left eye? 1-R, 2-L'...
-        'Save video? Enter 1/0'};
+        'Save video? Enter 1/0'...
+        'GS or RGB?'};
     title = 'File Loading';
     dims = [1 35];
-    definput = {'0','0','your_file','1','0'};
+    definput = {'0','0','your_file','1','0','RGB'};
     answer = inputdlg(prompt,title,dims,definput);
     filename2 = answer{3};
     RightLeft = str2double(answer{4});
     vidYN = str2double(answer{5});
+    color = answer{6};
 end
 
 % loading the files:
@@ -48,7 +50,7 @@ end
 %% Phase 1.5 - Dividing the signal to nPars partitions
 
 disp('Dont forget to define number of Par-fors!');
-nPars = 3;
+nPars = 2;
 lag_length = floor(frames/nPars);
 % defining the starting points for each lag:
 fr_start = ones(1,nPars);
@@ -93,7 +95,7 @@ parfor i = 1:nPars
     % partitions to initialize their contour of reference.
     
     init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.jpeg']),rect);
-    [prevCenter,maxArea,prevMask,origAngle,HSVranges] = init_partition(init_frame,user_init);
+    [prevCenter,maxArea,prevMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
     
     % Setting baseline masks:
 
@@ -121,10 +123,10 @@ parfor i = 1:nPars
 %         if fr>2 && isnan(eyeSig(i,fr-2))==1
         if fr>2 && isnan(tmp(fr-2))==1
             iter = 30;
-            [minorAxis, prevCenter, ~, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges);
+            [minorAxis, prevCenter, ~, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges, gs);
             iter = 15;
         else
-            [minorAxis, prevCenter, ~, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges);
+            [minorAxis, prevCenter, ~, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges, gs);
             iter = 15;
         end
 
@@ -149,7 +151,7 @@ parfor i = 1:nPars
                 frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
 %                 clear frameInTmp
                 
-                [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, inBlink, tmpIter, zeroCenter, HSVranges);
+                [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, inBlink, tmpIter, zeroCenter, HSVranges, gs);
                 
                 % Dealing with empty axes:
                 

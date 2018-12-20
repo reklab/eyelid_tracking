@@ -1,4 +1,4 @@
-function [ctrCoor,maxArea,expandedContour,angle,HSVRanges] = init_partition(frame,user_init)
+function [ctrCoor,maxArea,expandedContour,angle,HSVRanges] = init_partition(frame,user_init,gs)
 
 % This function is used in the initialization process of the eye tracking
 % using edge detection and active contour tracking, in a given partition of
@@ -10,7 +10,12 @@ function [ctrCoor,maxArea,expandedContour,angle,HSVRanges] = init_partition(fram
 
 % The added step: Letting the user choice to exapnd towards the eye
 % borders:
-expandedContour = activecontour(rgb2gray(frame),user_init,15);
+if strcmp(gs,'RGB')==1
+    % if its an rgs input
+    expandedContour = activecontour(rgb2gray(frame),user_init,15);
+else
+    expandedContour = activecontour(frame,user_init,15);
+end
 
 
 % Extracting key features from selected contour area:
@@ -25,7 +30,12 @@ ind3 = ind2+(size(expandedContour,1))*(size(expandedContour,2));
 
 % Conversion to HSV from RGB
 
-hsvFr = rgb2hsv(frame);
+if strcmp(gs,'RGB')==1
+    hsvFr = rgb2hsv(frame);
+else
+    hsvFr = rgb2hsv(cat(3, frame, frame, frame));
+end
+
 hVals = hsvFr(ind1);
 sVals = hsvFr(ind2);
 vVals = hsvFr(ind3);
