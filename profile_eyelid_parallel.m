@@ -46,11 +46,11 @@ elseif answer{1} == '1'
     [folder, frames, sortedStruct] = tiff2jpg();
 end
 
-
+gs = color;
 %% Phase 1.5 - Dividing the signal to nPars partitions
 
 disp('Dont forget to define number of Par-fors!');
-nPars = 2;
+nPars = 3;
 lag_length = floor(frames/nPars);
 % defining the starting points for each lag:
 fr_start = ones(1,nPars);
@@ -84,12 +84,15 @@ eyeSig = zeros(nPars,lag_length);
 areaSig = zeros(1,frames);
 ctrSigX = zeros(1,frames);
 ctrSigY = zeros(1,frames);
+skipLen = 140;
+full_blink_marker = zeros(nPars,lag_length);
 
 tic
 parfor i = 1:nPars
     
-    frSk = -1; skipLen = 0;
+%     frSk = -1; skipLen = 140;
     tmp = zeros(1, lag_length);
+    tmp_blink = zeros(1, lag_length);
     % Phase 2.5 - Processing of first frame for each partitions    
     % User to define the first area on first frame. This will be used in all
     % partitions to initialize their contour of reference.
@@ -133,61 +136,36 @@ parfor i = 1:nPars
         % Dealing with complete blinks:
         
         if inBlink == 1 && isClosed == 1
+            
             % in case both of these are flagged, our eye is entirely
             % closed and a skip ahead is required
+            % The protocol in this case will be to mark the event, and skip
+            % either 140 frames ahead, or to the end of the current
+            % partition.
             
-            curCenter = prevCenter;
-            skipLen = 140;
-            tmpPrvMsk = zeroMask;
-            tmpIter = 200;
-%             
-%             [tmp] = process_full_blink(prevCenter,skipLen,zeroMask,origAngle,...
-%                 zeroCenter,rect,fr,folder,sortedStruct,tmp,HSVranges,maxArea,inBlink);
+            tmp_blink(fr) = fr;
+            tmp(fr) = -100; % setting a temporary value to clearly be irrelevant
             
-           
-            for frSk = (skipLen+fr):-2:fr
-
-                frameInTmp = imread([folder '\' sortedStruct(fr_start(i)+frSk-1).name(1:end-5) '.jpeg']);
-                frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
-%                 clear frameInTmp
-                
-                [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, inBlink, tmpIter, zeroCenter, HSVranges, gs);
-                
-                % Dealing with empty axes:
-                
-                if isempty(tmpMinAx) == 0
-                    % meaning, there was an ellipse found (area non zero)
-%                     eyeSig(i,frSk) = tmpMinAx;
-                      tmp(frSk) = tmpMinAx;
-%                     areaSig(frSk) = tmpCurArea;
-%                     ctrSigX(frSk) = prevCenter(1);
-%                     ctrSigY(frSk) = prevCenter(2);
-                else
-                    % meaning, no ellipse was detected -> area is zero and eye
-                    % is completley closed (axis = 0)
-%                     eyeSig(i,frSk) = 0;
-                      tmp(frSk) = 0;
-%                     areaSig(frSk) = 0;                    
-%                     ctrSigX(frSk) = prevCenter(1);
-%                     ctrSigY(frSk) = prevCenter(2);
-                end
-                tmpIter = 15; 
+            % determine size of skip ahead:
+            if (fr_start(i)+lag_length-1-fr) < (skipLen+1)
+                % in this case, the gap between the current frame and the
+                % end of the current partition, is smaller than the usual
+                % skip length we use, so we skip to the end of the
+                % partition
+                fr = lag_length;
+            else
+                fr = fr + skipLen;
                 
             end
-            inBlink = 0;
             
-            % Skipping frames from outer run:
-            fr = fr + skipLen;
+            
             iter = 200;
             prevMask = zeroMask;
-            prevCenter = curCenter;
-            %clear frameTmp
-%             
-        end        
-
+            inBlink = 0;
+        end
         
-        if frSk ~= fr - skipLen % if this is the case, it means that it's not right after a full blink process
-            % Dealing with empty axes:
+%         if frSk ~= fr - skipLen % if this is the case, it means that it's not right after a full blink process
+%             % Dealing with empty axes:
             if isempty(minorAxis) == 0
                 % meaning, there was an ellipse found (area non zero)
                 %             eyeSig(i,fr) = minorAxis;
@@ -205,7 +183,7 @@ parfor i = 1:nPars
                 %             ctrSigY(fr) = prevCenter(2);
                 
             end
-        end
+%         end
  
         fr = fr + 2;
         
@@ -214,6 +192,8 @@ parfor i = 1:nPars
         end
     end
     eyeSig(i,:) = tmp;
+    full_blink_marker(i,:) = tmp_blink;
+
 end
 disp('Elapsed tracking time is: ')
 toc
@@ -221,8 +201,60 @@ toc
 
 %% Reassign values to the original signal
 eyeSig_combined = zeros(1,frames);
+full_blink_start =[];
 for j = 1:nPars
     eyeSig_combined(fr_start(j):fr_start(j)+lag_length-1) = eyeSig(j,:);
+    full_blink_start = [full_blink_start, find(full_blink_marker(j,:)~=0)+(lag_length*(j-1))];
+end
+
+%% Phase 3 - going back to full blinks processing:
+
+if isempty(full_blink_start)==0
+    % in this case, there were full blinks
+    
+    % setting the initial contour once again since it's not available from
+    % the parfor
+    init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-5) '.jpeg']),rect);
+    [zeroCenter,maxArea,zeroMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
+    
+    for k = 1:length(full_blink_start)
+        
+        %         curCenter = prevCenter;
+        skipLen = 140;
+        tmpPrvMsk = zeroMask;
+        tmpIter = 50;
+        
+        for frSk = full_blink_start(k)+skipLen:-2:full_blink_start(k)
+            
+            frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.jpeg']);
+            frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
+            clear frameInTmp
+            
+            [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, ~, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, 1, tmpIter, zeroCenter, HSVranges, gs);
+            
+            % Dealing with empty axes:
+            
+            if isempty(tmpMinAx) == 0
+                % meaning, there was an ellipse found (area non zero)
+                eyeSig_combined(frSk) = tmpMinAx;
+                %                     areaSig(frSk) = tmpCurArea;
+                %                     ctrSigX(frSk) = prevCenter(1);
+                %                     ctrSigY(frSk) = prevCenter(2);
+            else
+                % meaning, no ellipse was detected -> area is zero and eye
+                % is completley closed (axis = 0)
+                eyeSig_combined(frSk) = 0;
+                %                     areaSig(frSk) = 0;
+                %                     ctrSigX(frSk) = prevCenter(1);
+                %                     ctrSigY(frSk) = prevCenter(2);
+            end
+            tmpIter = 15;
+            
+        end
+    end
+else
+    % no full blinks detected
+    disp('No full blinks were detected');
 end
 
 %% Phase 4 - Output post processing and export
