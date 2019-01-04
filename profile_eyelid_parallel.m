@@ -19,15 +19,17 @@ while answer{1} ~= '0' && answer{1} ~= '1'
         'ROI already set? Enter 1/0','Output file name'...
         'Right or left eye? 1-R, 2-L'...
         'Save video? Enter 1/0'...
-        'GS or RGB?'};
+        'GS or RGB?'...
+        '# Processor(1-8)?' };
     title = 'File Loading';
     dims = [1 35];
-    definput = {'0','0','your_file','1','0','RGB'};
+    definput = {'0','0','your_file','1','0','RGB','1'};
     answer = inputdlg(prompt,title,dims,definput);
     filename2 = answer{3};
     RightLeft = str2double(answer{4});
     vidYN = str2double(answer{5});
     color = answer{6};
+    nPars = str2num(answer{7});
 end
 
 % loading the files:
@@ -48,42 +50,34 @@ end
 
 gs = color;
 %% Phase 1.5 - Dividing the signal to nPars partitions
-
-disp('Dont forget to define number of Par-fors!');
-nPars = 2;
-lag_length = floor(frames/nPars);
-% defining the starting points for each lag:
-fr_start = ones(1,nPars);
-for i = 2:nPars
-    fr_start(i) = fr_start(i-1)+lag_length;
+if nPars ~= 1
+    disp('Dont forget to define number of Par-fors!');
+    % nPars = 2;
+    lag_length = floor(frames/nPars);
+    % defining the starting points for each lag:
+    fr_start = ones(1,nPars);
+    for i = 2:nPars
+        fr_start(i) = fr_start(i-1)+lag_length;
+    end
 end
 
 
-%% Phase 2 - Initializing ROI for the entire video (like before)
-
-% if answer{2} == '0'
-
-% In this case, no ROI was defined in the past. User will now define it
-
-% Loading first frame:
-frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.jpeg']);
-
-% User to crop ROI. Same ROI will be used for all frames in video
-
-[frROI, rect] = imcrop(frame1); % rect: [xmin,ymin,width,height]
-close all;
-
-%% Phase 2.5 - Processing of first frame for each partitions
-
-
-imshow(frROI)
-[user_init, ~, ~] = roipoly();
-close all
-
+%% Phase 2 - Processing of first frame for each partitions
 
 if nPars ~= 1
     % This case will include parallel computing
+    % In this case, no ROI was defined in the past. User will now define it
     
+    % Loading first frame:
+    frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.jpeg']);
+    
+    % User to crop ROI. Same ROI will be used for all frames in video
+    
+    [frROI, rect] = imcrop(frame1); % rect: [xmin,ymin,width,height]
+    close all;
+    imshow(frROI)
+    [user_init, ~, ~] = roipoly();
+    close all
     eyeSig = zeros(nPars,lag_length);
     areaSig = zeros(1,frames);
     ctrSigX = zeros(1,frames);
@@ -203,6 +197,61 @@ if nPars ~= 1
 elseif nPars == 1
     
     % in case we don't want parallel running (nPars == 1)
+    if answer{2} == '0'
+        
+        % In this case, no ROI was defined in the past. User will now define it
+        
+        % Loading first frame:
+        frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.jpeg']);
+        
+        % User to crop ROI. Same ROI will be used for all frames in video
+        
+        [frROI, rect] = imcrop(frame1); % rect: [xmin,ymin,width,height]
+        close all;
+        
+        % User to define the first contour on the first frame:
+        
+        [prevCenter,maxArea,prevMask,origAngle,Xs,Ys,HSVranges] = eye_edge_gs(frROI,1,-1,-1,-1,gs);
+        
+        % Saving data for future use
+        firstFrameInput = cell(3,2);
+        firstFrameInput{1,1} = frROI;
+        firstFrameInput{1,2} = rect;
+        firstFrameInput{2,1} = Xs;
+        firstFrameInput{2,2} = Ys;
+        firstFrameInput{3,1} = prevMask;
+        firstFrameInput{3,2} = HSVranges;
+        
+        % Saving the initialization file for the selected contour and ROI
+        
+        if RightLeft == 1
+            % meaning, running on right eye
+            save([filename2 '_init_R'], 'firstFrameInput')
+        elseif RightLeft == 2
+            save([filename2 '_init_L'], 'firstFrameInput')
+        end
+        
+        % Setting baseline masks:
+        
+        zeroMask = prevMask;
+        zeroCenter = prevCenter;
+        
+    else
+        % In case ROI was already defined in the past, the user could load it
+        % from an initiation file
+        
+        uiopen('*.mat');
+        
+        Xs = firstFrameInput{2,1};
+        Ys = firstFrameInput{2,2};
+        rect = firstFrameInput{1,2};
+        zeroMask = firstFrameInput{3,1};
+        %     HSVranges = firstFrameInput{3,2};
+        [prevCenter,maxArea,~,origAngle,~,~,HSVranges] = eye_edge(firstFrameInput{1,1},0,Xs,Ys,zeroMask);
+        prevMask = zeroMask;
+        zeroCenter = prevCenter;
+        
+    end
     
     eyeSig = zeros(1,frames);
     areaSig = zeros(1,frames);
@@ -211,8 +260,7 @@ elseif nPars == 1
     i=1;
     inBlink = 0;
     iter = 15;
-    fr = 1;
-    
+    fr = 1;   
     % Phase 3 - Active contour tracking
     
     if vidYN == 1
@@ -231,7 +279,6 @@ elseif nPars == 1
             frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.jpeg']);
             frame = imcrop(frameIn,rect);
             clear frameIn
-            
             figure(1)
             
             % The next if statements is dealing with more than one NaN in a
