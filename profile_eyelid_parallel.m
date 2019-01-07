@@ -62,7 +62,7 @@ if nPars ~= 1
 end
 
 
-%% Phase 2 - Processing of first frame for each partitions
+%% Phase 2 - Processing of first frame for each partitions, followed by the tracking of the eye
 
 if nPars ~= 1
     % This case will include parallel computing
@@ -523,8 +523,8 @@ if nPars ~= 1
         % setting the initial contour once again since it's not available from
         % the parfor
         init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-5) '.jpeg']),rect);
-        [zeroCenter,maxArea,zeroMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
-        
+        [prevCenter,maxArea,zeroMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
+        zeroCenter = prevCenter;
         for k = 1:length(full_blink_start)
             
             %         curCenter = prevCenter;
@@ -557,7 +557,8 @@ if nPars ~= 1
                     %                     ctrSigY(frSk) = prevCenter(2);
                 end
                 tmpIter = 15;
-                
+                disp(['Done with ' num2str((1-(frSk-full_blink_start(k))/skipLen)*100)...
+                    ' of blink ' num2str(k) ' of ' num2str(length(full_blink_start)) '!'])
             end
         end
     else
