@@ -31,6 +31,7 @@ while answer{1} ~= '0' && answer{1} ~= '1'
     vidYN = str2double(answer{5});
     color = answer{6};
     suffix = answer{7};
+    roi_Need = answer{2};
 end
 
 % loading the files:
@@ -75,9 +76,10 @@ if nPars ~= 1
         % defining the starting points for each lag:
         fr_start = ones(1,nPars);
         for i = 2:nPars
-            fr_start(i) = fr_start(i-1)+lag_length-1;
+            %fr_start(i) = fr_start(i-1)+lag_length-1;
+            fr_start(i) = fr_start(i-1)+lag_length; 
             figure(i-1)
-            imshow(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '..' suffix]))
+            imshow(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.' suffix]))
         end
         
         pause(5);
@@ -239,7 +241,7 @@ if nPars ~= 1
 elseif nPars == 1
     
     % in case we don't want parallel running (nPars == 1)
-    if answer{2} == '0'
+    if roi_Need == '0'
         
         % In this case, no ROI was defined in the past. User will now define it
         
@@ -331,10 +333,10 @@ elseif nPars == 1
             if fr>2 && isnan(eyeSig(fr-2))==1
                 % case more than a single NaN in a row
                 iter = 30;
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges);
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs);
                 iter = 15;
             else
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges);
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs);
                 iter = 15;
             end
             
@@ -358,7 +360,7 @@ elseif nPars == 1
                     frameTmp = imcrop(frameInTmp,rect);
                     clear frameInTmp
                     
-                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 1, inBlink, tmpIter, zeroCenter, HSVranges);
+                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 1, inBlink, tmpIter, zeroCenter, HSVranges, gs);
                     
                     % Dealing with empty minor axes (no ellipse detected):
                     
