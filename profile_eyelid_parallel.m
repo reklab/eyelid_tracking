@@ -1,4 +1,4 @@
-function [] = profile_eyelid_parallel(nPars)
+function [] = profile_eyelid_parallel()
 
 % When using the parallel option, the user will have to pick the ROI. Later
 % on, we can introduce a case where it's not essential.
@@ -6,7 +6,8 @@ function [] = profile_eyelid_parallel(nPars)
 % the signal structure, and should ideally not cause problems with signal
 % division into equal parts.
 
-
+%% Phase 0: Generating a struct file with info on the folder. Essential in the first run of a vid
+[frames, sortedStruct] = sortJPEGs();
 %% Phase 1 - loading .tiff files with/without conversion to jpeg
 
 % if no conversion is needed - please input conversion == 0; otherwise, 1.
@@ -20,16 +21,17 @@ while answer{1} ~= '0' && answer{1} ~= '1'
         'Right or left eye? 1-R, 2-L'...
         'Save video? Enter 1/0'...
         'GS or RGB?'...
-        '# Processor(1-8)?' };
+        'jpeg, jpg, JPEG or JPG?'};
     title = 'File Loading';
     dims = [1 35];
-    definput = {'0','0','your_file','1','0','RGB','1'};
+    definput = {'0','0','your_file','1','0','RGB','jpeg'};
     answer = inputdlg(prompt,title,dims,definput);
     filename2 = answer{3};
     RightLeft = str2double(answer{4});
     vidYN = str2double(answer{5});
     color = answer{6};
-    nPars = str2num(answer{7});
+    suffix = answer{7};
+    roi_Need = answer{2};
 end
 
 % loading the files:
@@ -39,7 +41,7 @@ if answer{1} == '0'
     % pick folder containing jpeg files.
     
     folder = uigetdir('C:\','Select jpeg folder');
-    frames = length(dir([folder '/*.jpeg']));
+    frames = length(dir([folder '/*.' suffix]));
     load([folder '\files_struct.mat']);
     
 elseif answer{1} == '1'
@@ -50,14 +52,56 @@ end
 
 gs = color;
 %% Phase 1.5 - Dividing the signal to nPars partitions
+
+
+prompt = {'How many partitions?'};
+definput = {'1'};
+title = 'Partition Initialization';
+dims = [1 30];
+answer = inputdlg(prompt,title,dims,definput);
+nPars = str2double(answer{1});
+
+
 if nPars ~= 1
-    disp('Dont forget to define number of Par-fors!');
-    % nPars = 2;
-    lag_length = floor(frames/nPars);
-    % defining the starting points for each lag:
-    fr_start = ones(1,nPars);
-    for i = 2:nPars
-        fr_start(i) = fr_start(i-1)+lag_length-1;
+    partitionOK = 0;
+    while partitionOK ~= 1
+        
+        % In this case, we have more than a single processor at a time. First
+        % step of the process is to allow snapshot of the first frames of each
+        % partition.
+        % Once the user thinks the partition is OK, we change partitionOK
+        % from 0 to 1
+        
+        lag_length = floor(frames/nPars);
+        % defining the starting points for each lag:
+        fr_start = ones(1,nPars);
+        for i = 2:nPars
+            %fr_start(i) = fr_start(i-1)+lag_length-1;
+            fr_start(i) = fr_start(i-1)+lag_length; 
+            figure(i-1)
+            imshow(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.' suffix]))
+        end
+        
+        pause(5);
+        
+        prompt = {'Is the partition OK?'};
+        definput = {'1'};
+        title = 'Partition Validation';
+        dims = [1 30];
+        answer = inputdlg(prompt,title,dims,definput);
+        partitionOK = str2double(answer{1});
+        close all;
+        
+        if partitionOK == 0
+            % re partition:
+            prompt = {'How many partitions?'};
+            definput = {'1'};
+            title = 'Partition Re-initialization';
+            dims = [1 30];
+            answer = inputdlg(prompt,title,dims,definput);
+            nPars = str2double(answer{1});
+            
+        end
     end
 end
 
@@ -69,7 +113,7 @@ if nPars ~= 1
     % In this case, no ROI was defined in the past. User will now define it
     
     % Loading first frame:
-    frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.jpeg']);
+    frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.' suffix]);
     
     % User to crop ROI. Same ROI will be used for all frames in video
     
@@ -95,7 +139,7 @@ if nPars ~= 1
         % User to define the first area on first frame. This will be used in all
         % partitions to initialize their contour of reference.
         
-        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.jpeg']),rect);
+        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.' suffix]),rect);
         [prevCenter,maxArea,prevMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
         
         % Setting baseline masks:
@@ -117,7 +161,7 @@ if nPars ~= 1
         while fr < lag_length % Used to be -5// should verify ok
             % loading the next relevant frame
             
-            frameIn = imread([folder '\' sortedStruct(fr_start(i)+fr-1).name(1:end-5) '.jpeg']);
+            frameIn = imread([folder '\' sortedStruct(fr_start(i)+fr-1).name(1:end-5) '.' suffix]);
             frame = imcrop(frameIn,rect);
             %         clear frameIn
             
@@ -197,12 +241,12 @@ if nPars ~= 1
 elseif nPars == 1
     
     % in case we don't want parallel running (nPars == 1)
-    if answer{2} == '0'
+    if roi_Need == '0'
         
         % In this case, no ROI was defined in the past. User will now define it
         
         % Loading first frame:
-        frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.jpeg']);
+        frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.' suffix]);
         
         % User to crop ROI. Same ROI will be used for all frames in video
         
@@ -276,7 +320,7 @@ elseif nPars == 1
             
             % loading the next relevant frame:
             
-            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.jpeg']);
+            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.' suffix]);
             frame = imcrop(frameIn,rect);
             clear frameIn
             figure(1)
@@ -289,10 +333,10 @@ elseif nPars == 1
             if fr>2 && isnan(eyeSig(fr-2))==1
                 % case more than a single NaN in a row
                 iter = 30;
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges);
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs);
                 iter = 15;
             else
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges);
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs);
                 iter = 15;
             end
             
@@ -312,11 +356,11 @@ elseif nPars == 1
                 
                 for frSk = (skipLen+fr):-2:fr
                     
-                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.jpeg']);
+                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.' suffix]);
                     frameTmp = imcrop(frameInTmp,rect);
                     clear frameInTmp
                     
-                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 1, inBlink, tmpIter, zeroCenter, HSVranges);
+                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 1, inBlink, tmpIter, zeroCenter, HSVranges, gs);
                     
                     % Dealing with empty minor axes (no ellipse detected):
                     
@@ -408,7 +452,7 @@ elseif nPars == 1
             
             % loading the next relevant frame
             
-            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.jpeg']);
+            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.' suffix]);
             frame = imcrop(frameIn,rect);
             clear frameIn
             
@@ -435,7 +479,7 @@ elseif nPars == 1
                 
                 for frSk = (skipLen+fr):-2:fr
                     
-                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.jpeg']);
+                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.' suffix]);
                     frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
                     clear frameInTmp
                     
@@ -522,7 +566,7 @@ if nPars ~= 1
         
         % setting the initial contour once again since it's not available from
         % the parfor
-        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-5) '.jpeg']),rect);
+        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-5) '.' suffix]),rect);
         [prevCenter,maxArea,zeroMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
         zeroCenter = prevCenter;
         for k = 1:length(full_blink_start)
@@ -534,7 +578,7 @@ if nPars ~= 1
             
             for frSk = full_blink_start(k)+skipLen:-2:full_blink_start(k)
                 
-                frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.jpeg']);
+                frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.' suffix]);
                 frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
                 clear frameInTmp
                 
