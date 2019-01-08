@@ -57,7 +57,7 @@ if nPars ~= 1
     % defining the starting points for each lag:
     fr_start = ones(1,nPars);
     for i = 2:nPars
-        fr_start(i) = fr_start(i-1)+lag_length;
+        fr_start(i) = fr_start(i-1)+lag_length-1;
     end
 end
 
@@ -558,7 +558,7 @@ if nPars ~= 1
                 end
                 tmpIter = 15;
                 disp(['Done with ' num2str((1-(frSk-full_blink_start(k))/skipLen)*100)...
-                    ' of blink ' num2str(k) ' of ' num2str(length(full_blink_start)) '!'])
+                    '% of blink ' num2str(k) ' of ' num2str(length(full_blink_start)) '!'])
             end
         end
     else
