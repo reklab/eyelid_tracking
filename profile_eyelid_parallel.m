@@ -8,6 +8,7 @@ function [] = profile_eyelid_parallel()
 
 %% Phase 0: Generating a struct file with info on the folder. Essential in the first run of a vid
 [frames, sortedStruct] = sortJPEGs();
+
 %% Phase 1 - loading .tiff files with/without conversion to jpeg
 
 % if no conversion is needed - please input conversion == 0; otherwise, 1.
@@ -50,6 +51,8 @@ elseif answer{1} == '1'
     [folder, frames, sortedStruct] = tiff2jpg();
 end
 
+
+
 gs = color;
 %% Phase 1.5 - Dividing the signal to nPars partitions
 
@@ -79,7 +82,7 @@ if nPars ~= 1
             %fr_start(i) = fr_start(i-1)+lag_length-1;
             fr_start(i) = fr_start(i-1)+lag_length; 
             figure(i-1)
-            imshow(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.' suffix]))
+            imshow(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-(length(suffix)+1)) '.' suffix]))
         end
         
         pause(5);
@@ -113,7 +116,7 @@ if nPars ~= 1
     % In this case, no ROI was defined in the past. User will now define it
     
     % Loading first frame:
-    frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.' suffix]);
+    frame1 = imread([folder '\' sortedStruct(1).name(1:end-(length(suffix)+1)) '.' suffix]);
     
     % User to crop ROI. Same ROI will be used for all frames in video
     
@@ -139,7 +142,7 @@ if nPars ~= 1
         % User to define the first area on first frame. This will be used in all
         % partitions to initialize their contour of reference.
         
-        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-5) '.' suffix]),rect);
+        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(i)).name(1:end-(length(suffix)+1)) '.' suffix]),rect);
         [prevCenter,maxArea,prevMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
         
         % Setting baseline masks:
@@ -161,7 +164,7 @@ if nPars ~= 1
         while fr < lag_length % Used to be -5// should verify ok
             % loading the next relevant frame
             
-            frameIn = imread([folder '\' sortedStruct(fr_start(i)+fr-1).name(1:end-5) '.' suffix]);
+            frameIn = imread([folder '\' sortedStruct(fr_start(i)+fr-1).name(1:end-(length(suffix)+1)) '.' suffix]);
             frame = imcrop(frameIn,rect);
             %         clear frameIn
             
@@ -246,7 +249,7 @@ elseif nPars == 1
         % In this case, no ROI was defined in the past. User will now define it
         
         % Loading first frame:
-        frame1 = imread([folder '\' sortedStruct(1).name(1:end-5) '.' suffix]);
+        frame1 = imread([folder '\' sortedStruct(1).name(1:end-(length(suffix)+1)) '.' suffix]);
         
         % User to crop ROI. Same ROI will be used for all frames in video
         
@@ -320,7 +323,7 @@ elseif nPars == 1
             
             % loading the next relevant frame:
             
-            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.' suffix]);
+            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-(length(suffix)+1)) '.' suffix]);
             frame = imcrop(frameIn,rect);
             clear frameIn
             figure(1)
@@ -356,7 +359,7 @@ elseif nPars == 1
                 
                 for frSk = (skipLen+fr):-2:fr
                     
-                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.' suffix]);
+                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-(length(suffix)+1)) '.' suffix]);
                     frameTmp = imcrop(frameInTmp,rect);
                     clear frameInTmp
                     
@@ -452,7 +455,7 @@ elseif nPars == 1
             
             % loading the next relevant frame
             
-            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-5) '.' suffix]);
+            frameIn = imread([folder '\' sortedStruct(fr).name(1:end-(length(suffix)+1)) '.' suffix]);
             frame = imcrop(frameIn,rect);
             clear frameIn
             
@@ -479,7 +482,7 @@ elseif nPars == 1
                 
                 for frSk = (skipLen+fr):-2:fr
                     
-                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.' suffix]);
+                    frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-(length(suffix)+1)) '.' suffix]);
                     frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
                     clear frameInTmp
                     
@@ -566,7 +569,7 @@ if nPars ~= 1
         
         % setting the initial contour once again since it's not available from
         % the parfor
-        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-5) '.' suffix]),rect);
+        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-(length(suffix)+1)) '.' suffix]),rect);
         [prevCenter,maxArea,zeroMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
         zeroCenter = prevCenter;
         for k = 1:length(full_blink_start)
@@ -578,7 +581,7 @@ if nPars ~= 1
             
             for frSk = full_blink_start(k)+skipLen:-2:full_blink_start(k)
                 
-                frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-5) '.' suffix]);
+                frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-(length(suffix)+1)) '.' suffix]);
                 frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
                 clear frameInTmp
                 
