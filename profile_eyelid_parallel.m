@@ -461,10 +461,10 @@ elseif nPars == 1
             
             if fr>2 && isnan(eyeSig(fr-2))==1
                 iter = 30;
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges);
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges, gs);
                 iter = 15;
             else
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges);
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges, gs);
                 iter = 15;
             end
             
@@ -486,7 +486,7 @@ elseif nPars == 1
                     frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
                     clear frameInTmp
                     
-                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, inBlink, tmpIter, zeroCenter, HSVranges);
+                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, inBlink, tmpIter, zeroCenter, HSVranges, gs);
                     
                     % Dealing with empty axes:
                     
