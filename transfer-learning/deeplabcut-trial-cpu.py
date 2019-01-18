@@ -24,3 +24,4 @@ videofile_path = '/Reaching-Mackenzie-2018-08-30/videos/MovieS2_Perturbation_noL
 print("Start Analyzing the video!")
 deeplabcut.analyze_videos(path_config_file,[videofile_path])
 deeplabcut.create_labeled_video(path_config_file,[videofile_path])
+
