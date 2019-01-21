@@ -43,3 +43,6 @@ videofile_path = ['dlc-blinking/an3_vid2/videos/an3_vid2_150fps.mp4'] #Enter the
 deeplabcut.analyze_videos(path_config_file,videofile_path)
 
 deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2\\videos\\an3_vid2_150fps.mp4'], save_frames=True)
+
+%matplotlib notebook #for making interactive plots.
+deeplabcut.plot_trajectories(path_config_file,videofile_path)
