@@ -35,3 +35,11 @@ deeplabcut.create_training_dataset(path_config_file)
 # Training the dataset
 deeplabcut.train_network(path_config_file)
 
+# Evaluating the results
+deeplabcut.evaluate_network(path_config_file)
+
+# Analyzing video
+videofile_path = ['dlc-blinking/an3_vid2/videos/an3_vid2_150fps.mp4'] #Enter the list of videos to analyze.
+deeplabcut.analyze_videos(path_config_file,videofile_path)
+
+deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2\\videos\\an3_vid2_150fps.mp4'], save_frames=True)
