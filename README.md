@@ -23,5 +23,9 @@ You can also type in `conda list` to get a list of all the packages currently in
 
 This process was done mostly based on the documnetation provided in the [DLC Installation Guide](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md), with minor adjustments and changes following local errors we received. You can follow their guidance for the official version, or try the following steps:
 
+Start by forking DLC or downloading the library to your PC. Locate the file named `dlc-windowsCPU.yaml` in your PC and copy this directory address.
 
+# Creating the environment:
+
+Open the Anaconda Prompt (via start menu), and create an Anaconda Environment. Before doing so, make sure you are in the correct directory
 
