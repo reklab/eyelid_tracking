@@ -23,9 +23,41 @@ You can also type in `conda list` to get a list of all the packages currently in
 
 This process was done mostly based on the documnetation provided in the [DLC Installation Guide](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md), with minor adjustments and changes following local errors we received. You can follow their guidance for the official version, or try the following steps:
 
-Start by forking DLC or downloading the library to your PC. Locate the file named `dlc-windowsCPU.yaml` in your PC and copy this directory address.
+Start by downloading the library to your PC. Locate the file named `dlc-windowsCPU.yaml` in your PC and copy this directory address.
 
 # Creating the environment:
 
-Open the Anaconda Prompt (via start menu), and create an Anaconda Environment. Before doing so, make sure you are in the correct directory
+Open the Anaconda Prompt (via start menu), and create an Anaconda Environment. Before doing so, make sure you are in the correct directory (the one containing the `.yaml` file mentioned earlier - this file will provide the configuration details for the environment.
+In the prompt, create the environment:'
+
+`conda env create -f dlc-windowsCPU.yaml`
+
+Once that's done, activate the environment:
+
+`activate dlc-windowsCPU`
+
+# Installing DeepLabCut:
+
+If all is right - you can now install DeepLabCut using `pip`:
+
+`pip install deeplabcut`
+
+Followed by:
+
+`pip install -U wxPython`
+
+# Installing TensorFlow:
+
+Documentation on the official DLC page suggest to install a specific TensorFlow version (`pip install --ignore-installed tensorflow==1.10`), however I found it to not work in my environment. Instead, try installing the latest version of TF as follows:
+
+`pip install --ignore-installed tensorflow`
+
+This will install a later version (1.12 in the time I'm writing this document), which seemed to work perfectly fine.
+
+# Possible errors and problems, and how to deal with them:
+
+When installing DLC, you might get the following message:
+`jupyter-console 6.0.0 has requirement prompt_toolkit<2.1.0,>=2.0.0, but you'll have prompt-toolkit 1.0.15 which is incompatible.`
+
+In this case,
 
