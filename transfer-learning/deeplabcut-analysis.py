@@ -10,10 +10,18 @@ Created on Mon Jan 21 14:38:29 2019
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def plot_output(minor_axis, fps, frames):
     
     t = frames/fps
+    plt.plot(t,minor_axis)
+    
+    sns.set_style("whitegrid")
+    sns.lineplot(t,minor_axis)
+    plt.ylabel('Minor Axis Length [pixels]', fontsize=16)
+    plt.xlabel('Time [seconds]', fontsize=16)
+
 
 
 def minor_length(df):
@@ -45,10 +53,11 @@ df = df.drop(['eye-top-point_x', 'eye-top-point_y',
 
 # generate minor axis length:
 minor_axis = minor_length(df)
-frames = df.bodyparts_coords
+
+# plotting (using seaborn)
+frames = df.bodyparts_coords # getting the frames 
 fps = 500
 
-plt.plot(t,minor_axis)
-    
+plot_output(minor_axis,fps,frames)
     
 
