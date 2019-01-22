@@ -2,6 +2,7 @@
 Codes for eye_lid tracking application developed in Guy Tsor's master's thesis.
 Github @guyts.
 
+The code in this library contains two very different approaches to eyelid tracking - one (implemented in MATLAB) uses the active contour algorithm to track contours throuhout a video, while the other (implemented in Python) uses a transfer learning framework (DeepLabCut 2) to train a classifier to track the eye in a video recording.
 
 # DeepLabCut installation and setup on a Windows 10 environment
 
