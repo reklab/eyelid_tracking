@@ -7,7 +7,6 @@ Created on Fri Jan 18 14:03:23 2019
 
 # DLC Set up on blinking
 
-
 import deeplabcut
 
 task='Looking' # Enter the name of your experiment Task

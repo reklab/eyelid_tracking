@@ -9,15 +9,55 @@ Created on Mon Jan 21 14:38:29 2019
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def plot_output(minor_axis, fps, frames):
+    
+    t = frames/fps
+    plt.plot(t,minor_axis)
+    
+    sns.set_style("whitegrid")
+    sns.lineplot(t,minor_axis)
+    plt.ylabel('Minor Axis Length [pixels]', fontsize=16)
+    plt.xlabel('Time [seconds]', fontsize=16)
+
+
+
+def minor_length(df):
+    minor_axis  = []
+    for index,row in df.iterrows():
+        x1 = row['eye-left-edge_x']
+        y1 = row['eye-left-edge_y']
+        x2 = row['eye-right-edge_x']
+        y2 = row['eye-right-edge_y']
+        minor_axis.append(calc_euc(x1,y1,x2,y2))
+    return minor_axis
+
+def calc_euc(x1,y1,x2,y2):
+    dist = np.sqrt(np.power(x1-x2,2)+np.power(y1-y2,2))
+    return dist
 
 filename = 'an3_vid2_150fpsDeepCut_resnet50_LookingJan18shuffle1_400000.csv'
 df = pd.read_csv(filename)
 
-
 # reorganizing dataframe
-df.columns = df.iloc[0]
-df.reindex(df.index.drop(0))
+df.columns = (df.iloc[0] + '_' + df.iloc[1])
+df = df.iloc[2:].reset_index(drop=True)
+df = df.apply(pd.to_numeric)
 
-stri = [df.iloc[0,:], df.iloc[1,:]]
+# relevant coordinates dataframe
+df = df.drop(['eye-top-point_x', 'eye-top-point_y',
+       'eye-top-point_likelihood', 'eye-bottom-point_x', 'eye-bottom-point_y',
+       'eye-bottom-point_likelihood'], axis=1)
 
-stri[1].str.cat(sep='_')
+# generate minor axis length:
+minor_axis = minor_length(df)
+
+# plotting (using seaborn)
+frames = df.bodyparts_coords # getting the frames 
+fps = 500
+
+plot_output(minor_axis,fps,frames)
+    
+
