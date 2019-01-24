@@ -12,17 +12,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot_output(minor_axis, fps, frames):
-    
-    t = frames/fps
-    plt.plot(t,minor_axis)
-    
+def plot_output(df):
+       
     sns.set_style("whitegrid")
-    sns.lineplot(t,minor_axis)
+    sns.lineplot('time','minor_axis',data=df)
     plt.ylabel('Minor Axis Length [pixels]', fontsize=16)
     plt.xlabel('Time [seconds]', fontsize=16)
-
-
 
 def minor_length(df):
     minor_axis  = []
@@ -55,9 +50,16 @@ df = df.drop(['eye-top-point_x', 'eye-top-point_y',
 minor_axis = minor_length(df)
 
 # plotting (using seaborn)
-frames = df.bodyparts_coords # getting the frames 
+frames = df.bodyparts_coords+1 # getting the frames 
 fps = 500
 
-plot_output(minor_axis,fps,frames)
+# input into a single dataframe
+d = {'frame': frames,
+     'time': frames/fps,
+     'minor_axis': minor_axis, 
+     }
+output_df = pd.DataFrame(d)
+
+plot_output(output_df)
     
 
