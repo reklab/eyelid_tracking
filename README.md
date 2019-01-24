@@ -22,11 +22,13 @@ You can also type in `conda list` to get a list of all the packages currently in
 
 ## Step 2: Setting up DeepLabCut:
 
-This process was done mostly based on the documnetation provided in the [DLC Installation Guide](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md), with minor adjustments and changes following local errors we received. You can follow their guidance for the official version, or try the following steps:
+This process was done mostly based on the documnetation provided in the [DLC Installation Guide](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md). If you installed Anaconda from scratch and had no prior environments set - the documentation provided above should work perfectly okay.
 
-Start by downloading the library to your PC. Locate the file named `dlc-windowsCPU.yaml` in your PC and copy this directory address.
+In case you had additional libraries installed beforehand, you might need to make minor adjustments and changes in case you get errors while installing DLC or TensorFlow.
 
 # Creating the environment:
+
+Start by downloading the library to your PC. Locate the file named `dlc-windowsCPU.yaml` in your PC and copy this directory address.
 
 Open the Anaconda Prompt (via start menu), and create an Anaconda Environment. Before doing so, make sure you are in the correct directory (the one containing the `.yaml` file mentioned earlier - this file will provide the configuration details for the environment.
 In the prompt, create the environment:'
@@ -57,8 +59,13 @@ This will install a later version (1.12 in the time I'm writing this document), 
 
 # Possible errors and problems, and how to deal with them:
 
-When installing DLC, you might get the following message:
+When installing DLC, you might get an error message that looks like the following:
+
 `jupyter-console 6.0.0 has requirement prompt_toolkit<2.1.0,>=2.0.0, but you'll have prompt-toolkit 1.0.15 which is incompatible.`
 
-In this case,
+In this case, simply use `pip install PACKAGENAME==VER.SION` to install the version required to have DLC run properly. For example, for the error above, you could install the relevant version of `prompt-toolkit`:
+
+`pip install prompt_toolkit==2.0.1`
+
+This will install a version that is compatiable with DLC.
 
