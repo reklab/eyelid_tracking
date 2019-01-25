@@ -1,0 +1,37 @@
+Important guidelines and micro-instructtion for using DLC
+January 24th, 2019
+
+The original paper "Using DeepLabCut for 3D markerless pose estimation across species and behaviors" by Nath, Mathis, Chen, Patel, Bethge and Mathis is very valuable and worth reviewing before setting up the first time.
+
+1. When creating the project:
+
+Wake sure your working environment (current directory) is set to the base of the directory (e.g. C:\).
+Make sure that within this directory, there's a folder named 'videos' with the videos you would like to train the model with.
+
+2. Configurating the training data set:
+
+Go to your config.yaml file in the project directory.
+Under video_sets, change 'crop' to the coordinates relevant for the video.
+Under bodyparts, set the names for all markers you intend to use (e.g. 'left-eye-outer_edge'). You can add new markers by adding a line.
+Under numframes2pick, set the number of frames (default 20) required to train the machine with. 
+Under start and stop, you may set the interval where training frames will be extracted from. This should cover diverse locations, and so recommended to be a short interval (perhaps around a blinking motion).
+
+3. Labeling data set:
+
+Use the extract_frames function with either uniform or kmeans extraction. Kmeans will be more useful in our case of sparse blinking, as it picks based on visual differences of the frames. Only use these in case the frame is small and interval is not long, as this is high complexity.
+
+Before launching the labeling tool, go to the labeled-data folder, and remove the first file in the folder - as it is extracted before you crop the video.
+
+When loading the tool, click 'load frames' and pick the folder containing all extracted frames.
+Right click on the image to place a marker, and move it around with left click and drag.
+In case a location is missing in a given frame - it should be skipped when labeling!
+
+
+4. Evaluating the trained network:
+
+When evaluating the network, you may set 'plotting=True' to get the images of the manually set markers (training set) and the automatic set markers (testing set). 
+
+Keep in mind: 
+1. Training can take several days when done with CPU rather than GPU.
+2. Larger frames (less cropped out) will take significantly longer to train and to analyze
+
