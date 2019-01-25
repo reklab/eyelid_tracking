@@ -1,0 +1,24 @@
+General guidelines and micro-instructtion for using DLC
+January 24th, 2019
+
+1. When creating the project:
+
+Wake sure your working environment (current directory) is set to the base of the directory (e.g. C:\).
+Make sure that within this directory, there's a folder named 'videos' with the videos you would like to train the model with.
+
+2. Configurating the training data set:
+
+Go to your config.yaml file in the project directory.
+Under video_sets, change 'crop' to the coordinates relevant for the video.
+Under bodyparts, set the names for all markers you intend to use (e.g. 'left-eye-outer_edge'). You can add new markers by adding a line.
+
+3. Labeling data set:
+
+Before launching the labeling tool, go to the labeled-data folder, and remove the first file in the folder - as it is extracted before you crop the video.
+
+
+
+Keep in mind: 
+1. Training can take several days when done with CPU rather than GPU.
+2. Larger frames (less cropped out) will take significantly longer to train and to analyze
+
