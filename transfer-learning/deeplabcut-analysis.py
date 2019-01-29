@@ -11,7 +11,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import scipy.io
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly.graph_objs as go
+from plotly import tools
 
 def plot_single_output(df):
        
@@ -128,5 +130,56 @@ plot_double_output(output_df)
 
 ## IMPORTING OLD DATA TO SUPERIMPOSE FOR COMPARISON
 
-old_L = scipy.io.loadmat('file.mat')
+mat_output = pd.read_csv('../final-outputs/an3vid2/animal_3_video_2_L_SigOutput.csv',header=None)
+mat_validation = pd.read_csv('../final-outputs/an3vid2/animal_3_video_2_L_ValOutput.csv',header=None)
+
+# matching signal lengths by dropping endings of Python generated files:
+
+diff = len(df)-len(mat_output)
+#dlc_output = df.copy(df.drop(df.tail(diff).index,inplace=True))
+mat_validation.drop(mat_validation.tail(len(mat_validation)-len(mat_output)).index,inplace=True)
+
+# OR removing directly from the minor axis vector list
+minor_axis_L_adj = minor_axis_L[0:-diff]
+
+# Create a view with all 3 plots using plotly:
+
+trace_dlc = go.Scatter(
+    x = frames[0:-1],
+    y = minor_axis_L_adj,
+    mode = 'lines',
+    name = 'ML Approach',
+    marker = dict(
+            color = 'blue'
+            )
+)
+trace_contour = go.Scatter(
+    x = frames[0:-1],
+    y = mat_output.iloc[:,0],
+    mode = 'lines',
+    name = 'Active Contour Approach',
+    marker = dict(
+            color = 'brown'
+            )
+)
+trace_manual = go.Scatter(
+    x = frames[0:-1],
+    y = mat_validation.iloc[:,0],
+    mode = 'lines',
+    name = 'Manual Validation',
+    marker = dict(
+            color = 'green'
+            )
+)
+
+fig = tools.make_subplots(rows=1, cols=1)
+fig.append_trace(trace_dlc, 1, 1)
+fig.append_trace(trace_contour, 1, 1)
+fig.append_trace(trace_manual, 1, 1)
+
+init_notebook_mode(connected=True)
+
+fig['layout'].update(height=800, width=1200, title='Deep Learning vs. Active Contour vs. Manual')
+
+plot(fig)
 
