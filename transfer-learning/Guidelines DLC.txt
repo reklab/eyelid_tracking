@@ -30,8 +30,29 @@ In case a location is missing in a given frame - it should be skipped when label
 4. Evaluating the trained network:
 
 When evaluating the network, you may set 'plotting=True' to get the images of the manually set markers (training set) and the automatic set markers (testing set). 
+In addition, change 'snapshotindex' in the config file, to the snapshot integer of desire (1,2,3...). The snapshot index will determine which training snapshot is used for analyzing new videos.
+
+
+
+~~~~~~~~ SETTING UP GPU WITH ANACONDA ON WINDOWS ~~~~~~~~~
+
+After downloading the NVIDIA driver relevant (Check in Start>Device Manager>Display adapters) and installing it, download the NVIDIA GPU CUDA Toolkit (https://developer.nvidia.com/cuda-downloads).
+
+In the meantime, register on NVIDIA and download the cuDNN (the deep learning library by NVIDIA).
+
+Follow the steps provided in: 
+https://medium.com/@minhplayer95/how-to-install-tensorflow-with-gpu-support-on-windows-10-with-anaconda-4e80a8beaaf0
+to install and set up the CUDA environment, and TensorFlow. 
+
+NOTE!!! Please set up a separate Anaconda environment for the GPU processing (dlc-windowsGPU) as suggested by DLC documentation (https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md#install-tensorflow---with-gpu-support-or-cpu-support)
+
+
+
+
+
 
 Keep in mind: 
 1. Training can take several days when done with CPU rather than GPU.
 2. Larger frames (less cropped out) will take significantly longer to train and to analyze
+3. Evaluation will take between a few minutes and an hour (CPU)
 

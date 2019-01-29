@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jan 18 14:03:23 2019
+Created on Mon Jan 28 15:40:32 2019
 
 @author: gtsror
 """
@@ -11,13 +11,13 @@ import deeplabcut
 import matplotlib
 
 task='eyes_only' # Enter the name of your experiment Task
-experimenter='Guy' # Enter the name of the experimenter
+experimenter='Guy-gpu' # Enter the name of the experimenter
 video=['videos/animal_3_video_2_150fps_correct.mp4', 'videos/march_8_animal_1_video_150fps_correct.mp4'] # Enter the paths of your videos you want to grab frames from.
 
 deeplabcut.create_new_project(task,experimenter,video, working_directory='dlc-blinking/an3_vid2_full',copy_videos=True) #change the working directory to where you want the folders created.
 
 %matplotlib inline
-path_config_file = '/dlc-blinking/an3_vid2_full/eyes_only-Guy-2019-01-25/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
+path_config_file = '/dlc-blinking/an3_vid2_full/eyes_only-Guy-gpu-2019-01-28/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
 deeplabcut.extract_frames(path_config_file,'automatic','uniform',crop=True, checkcropping=True) #there are other ways to grab frames, such as by clustering 'kmeans'; please see the paper. 
 
 # changed the cropping dimensions in the config.yaml file
