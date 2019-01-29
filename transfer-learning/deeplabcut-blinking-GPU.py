@@ -17,8 +17,8 @@ video=['videos/animal_3_video_2_150fps_correct.mp4', 'videos/march_8_animal_1_vi
 deeplabcut.create_new_project(task,experimenter,video, working_directory='dlc-blinking/an3_vid2_full',copy_videos=True) #change the working directory to where you want the folders created.
 
 %matplotlib inline
-path_config_file = '/dlc-blinking/an3_vid2_full/eyes_only-Guy-gpu-2019-01-28/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
-deeplabcut.extract_frames(path_config_file,'automatic','uniform',crop=True, checkcropping=True) #there are other ways to grab frames, such as by clustering 'kmeans'; please see the paper. 
+path_config_file = '/dlc-blinking/an3_vid2_full/eyes_only-Guy-gpu-2019-01-29/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
+deeplabcut.extract_frames(path_config_file,'automatic','uniform'),crop=True, checkcropping=True) #there are other ways to grab frames, such as by clustering 'kmeans'; please see the paper. 
 
 # changed the cropping dimensions in the config.yaml file
 %gui wx
