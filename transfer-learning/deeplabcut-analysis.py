@@ -101,9 +101,9 @@ plot_single_output(output_df)
 ## FOLLOWING SECTION HANDLES DOUBLE EYES VIDEOS
 
 filename1 = 'animal_3_video_2_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv'
-filename2 = 'march_8_animal_1_video_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000' 
+filename2 = 'march_8_animal_1_video_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv' 
 
-df = pd.read_csv(filename1)
+df = pd.read_csv(filename2)
 
 # reorganizing dataframe with column names etc
 df.columns = (df.iloc[0] + '_' + df.iloc[1])
@@ -183,3 +183,4 @@ fig['layout'].update(height=800, width=1200, title='Deep Learning vs. Active Con
 
 plot(fig)
 
+# Calculate errors:
