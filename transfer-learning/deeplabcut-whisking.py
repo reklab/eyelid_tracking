@@ -43,7 +43,8 @@ deeplabcut.evaluate_network(path_config_file)
 # Analyzing video
 videofile_path = ['dlc-blinking/an3_vid2_full/eyes_only-Guy-2019-01-25/videos/animal_3_video_2_150fps_correct.mp4',
                   'dlc-blinking/an3_vid2_full/eyes_only-Guy-2019-01-25/videos/march_8_animal_1_video_150fps_correct.mp4'] #Enter the list of videos to analyze.
-videofile_path = ['dlc-blinking/an3_vid2_full/eyes_only-Guy-2019-01-25/videos/crush_19_01_07_animal_3.mp4']
+videofile_path = ['dlc-blinking/whisk/whisk_only-Guy-2019-02-01/videos/crush_19_01_07_animal_3.mp4',
+                  'dlc-blinking/whisk/whisk_only-Guy-2019-02-01/videos/animal_3_video_2_150fps_correct.mp4']
 deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
 
 
