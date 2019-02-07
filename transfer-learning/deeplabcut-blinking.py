@@ -7,6 +7,7 @@ Created on Fri Jan 18 14:03:23 2019
 
 # Loading deeplabcut
 # notice the warning re Tk vs Qt
+# This training was done using DLC v2.0.4.1
 
 import deeplabcut
 import matplotlib
@@ -29,7 +30,8 @@ sides = 'lr' # Enter the name of the experimenter
 training_videos = ['videos/2018_03_08_animal_1_video_1b.mp4',
                    'videos/2018_03_09_animal_3_video_2.mp4',
                    'videos/2019_01_07_animal_2.mp4',
-                   'videos/2019_01_07_animal_3.mp4'
+                   'videos/2019_01_07_animal_3.mp4',
+                   'videos/2019_01_07_animal_5.mp4'
                    ]
 
 # Defining the working directory within the current directory. This will open a new folder for the project.
@@ -37,11 +39,11 @@ training_videos = ['videos/2018_03_08_animal_1_video_1b.mp4',
 # This also changes the current working directory (supposed to, not sure if happens in practice)
 
 deeplabcut.create_new_project(task, sides, training_videos, working_directory='dlc-blinking',copy_videos=True)
-path_config_file = '/dlc-blinking/blinking-lr-2019-02-06/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
+path_config_file = '/dlc-blinking/blinking-lr-2019-02-07/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
 
 # if we plan on adding new videos to the project, we should use the following option:
 #deeplabcut.add_new_videos(config_path,[‘full path of video X’, ‘full path of video X+1’],copy_videos=True/False)
-deeplabcut.add_new_videos(path_config_file,['videos/2019_01_07_animal_5.mp4'],copy_videos=True)
+#deeplabcut.add_new_videos(path_config_file,['videos/2019_01_07_animal_5.mp4'],copy_videos=True)
 
 # Config file is now written.
 # Go to config file for changing the bodyparts.
@@ -55,6 +57,7 @@ deeplabcut.add_new_videos(path_config_file,['videos/2019_01_07_animal_5.mp4'],co
 # the matplotlib inline is required to keep all plots within the console
 %matplotlib inline
 deeplabcut.extract_frames(path_config_file, 'automatic', 'uniform', crop=True, checkcropping=True, opencv=False) #there are other ways to grab frames, such as by clustering 'kmeans'; please see the paper. 
+deeplabcut.extract_frames(path_config_file, 'manual')
 
 # go to the labeled data folder, and remove the first image for each folder. It's usually uncropped.
 # we can now label the frames
@@ -62,9 +65,8 @@ deeplabcut.extract_frames(path_config_file, 'automatic', 'uniform', crop=True, c
 deeplabcut.label_frames(path_config_file)
 
 # Lables have now been created
-
-deeplabcut.check_labels(path_config_file) #this creates a subdirectory with the frames + your labels
-# Reviewed the labels, the seem to be ok
+# The following command creates the samples with labels, to review:
+deeplabcut.check_labels(path_config_file) 
 
 # Downloading the ResNets dataset:
 deeplabcut.create_training_dataset(path_config_file)
