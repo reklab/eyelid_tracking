@@ -1,0 +1,6 @@
+model_checkpoint_path: "D:\\dlc-blinking\\blinking-lr-2019-02-07\\dlc-models\\iteration-0\\blinkingFeb7-trainset95shuffle1\\train\\snapshot-360000"
+all_model_checkpoint_paths: "D:\\dlc-blinking\\blinking-lr-2019-02-07\\dlc-models\\iteration-0\\blinkingFeb7-trainset95shuffle1\\train\\snapshot-280000"
+all_model_checkpoint_paths: "D:\\dlc-blinking\\blinking-lr-2019-02-07\\dlc-models\\iteration-0\\blinkingFeb7-trainset95shuffle1\\train\\snapshot-300000"
+all_model_checkpoint_paths: "D:\\dlc-blinking\\blinking-lr-2019-02-07\\dlc-models\\iteration-0\\blinkingFeb7-trainset95shuffle1\\train\\snapshot-320000"
+all_model_checkpoint_paths: "D:\\dlc-blinking\\blinking-lr-2019-02-07\\dlc-models\\iteration-0\\blinkingFeb7-trainset95shuffle1\\train\\snapshot-340000"
+all_model_checkpoint_paths: "D:\\dlc-blinking\\blinking-lr-2019-02-07\\dlc-models\\iteration-0\\blinkingFeb7-trainset95shuffle1\\train\\snapshot-360000"

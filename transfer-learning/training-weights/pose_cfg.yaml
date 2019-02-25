@@ -1,0 +1,41 @@
+all_joints:
+- [0]
+- [1]
+- [2]
+- [3]
+- [4]
+- [5]
+all_joints_names: [left-eye-top, left-eye-outer, left-eye-inner, right-eye-top, right-eye-outer,
+  right-eye-inner]
+bottomheight: 400
+crop: true
+cropratio: 0.4
+dataset: training-datasets\iteration-0\UnaugmentedDataSet_blinkingFeb7\blinking_lr95shuffle1.mat
+display_iters: 1000
+global_scale: 0.8
+init_weights: C:\Users\gtsror\AppData\Local\Continuum\anaconda3\envs\dlc-windowsCPU\lib\site-packages\deeplabcut\pose_estimation_tensorflow\models\pretrained\resnet_v1_50.ckpt
+intermediate_supervision: false
+intermediate_supervision_layer: 12
+leftwidth: 400
+location_refinement: true
+locref_huber_loss: true
+locref_loss_weight: 0.05
+locref_stdev: 7.2801
+max_input_size: 1500
+metadataset: training-datasets\iteration-0\UnaugmentedDataSet_blinkingFeb7\Documentation_data-blinking_95shuffle1.pickle
+minsize: 100
+mirror: false
+multi_step:
+- [0.005, 10000]
+- [0.02, 430000]
+- [0.002, 730000]
+- [0.001, 1030000]
+net_type: resnet_50
+num_joints: 6
+pos_dist_thresh: 17
+project_path: D:\dlc-blinking\blinking-lr-2019-02-07
+rightwidth: 400
+save_iters: 20000
+scale_jitter_lo: 0.5
+scale_jitter_up: 1.25
+topheight: 400

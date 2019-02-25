@@ -1,0 +1,1 @@
+This folder contains training weights generated on February 2019 (7-9/2), based on 6 videos, 3 of each (new recording and old-new recordings)
