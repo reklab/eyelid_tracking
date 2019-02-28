@@ -4,7 +4,7 @@ function [] = jpg2mp4()
 % and a sortedStruct MATLAB struct file, with information regarding the
 % right order of files in the video.
 
-folder = uigetdir('D:\Guy\Dropbox (NRP)\Diego_Guy\crush_experiement\2018_07_01\');
+folder = uigetdir('D:\Guy\Dropbox (NRP)\Diego_Guy\crush_experiement\2019_01_14\');
 frames = length(dir([folder '/*.jpg']));
 load([folder '\files_struct.mat']);
 
