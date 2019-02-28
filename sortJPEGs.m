@@ -9,7 +9,7 @@ folder = uigetdir('C:\');
 % folderout = [folder '_jpegs'];
 all_files = dir([folder '/*.jpg']);
 file_prefix_list = zeros(length(all_files),1);
-
+disp('Sorting image files to order');
 % indexing the files:
 
 for i = 1:length(all_files)   
