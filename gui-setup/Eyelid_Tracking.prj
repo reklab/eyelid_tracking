@@ -1,0 +1,125 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="1330826663" file="D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup\Eyelid_Tracking.prj" location="D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup" name="Eyelid_Tracking" preferred-package-location="D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup\Eyelid_Tracking\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>Eyelid_Tracking</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark>Guy Tsror</param.authnamewatermark>
+    <param.email>guy.tsror@mail.mcgill.ca</param.email>
+    <param.company>McGill University</param.company>
+    <param.summary>This application allows tracking and measurement of eyelid movement or eye-openness acquired via video recordings.</param.summary>
+    <param.description>Using the active contour method, this application takes user input describing the initial location of eye edges, and tracks the movement of eyelids throughout the video.
+The application can produce output signals describing eyelid movement, and videos displaying the tracked contours on the eye.</param.description>
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>\Eyelid_Tracking\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\Eyelid_Tracking\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\Eyelid_Tracking\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\Eyelid_Tracking\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\Eyelid_Tracking</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>true</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.combo />
+      <param.logo />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+    </unset>
+    <fileset.main>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eyelid_tracking_gui.m</file>
+    </fileset.main>
+    <fileset.resources />
+    <fileset.package />
+    <fileset.depfun>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\extract_ellipse.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eye_edge.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eye_edge_gs.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\init_partition.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\mark_blinks.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\naninterp.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\nestedSortStruct.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\parfor_progressbar.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\plot_ellipse.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\relevant_eye.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\relevant_eye_gs.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortJPEGs.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortStruct.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\tiff2jpg.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\Eyelid_Tracking\for_testing" name="Eyelid_Tracking.exe" optional="false">D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup\Eyelid_Tracking\for_testing\Eyelid_Tracking.exe</file>
+      <file location="${PROJECT_ROOT}\Eyelid_Tracking\for_testing" name="splash.png" optional="false">D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup\Eyelid_Tracking\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\Eyelid_Tracking\for_testing" name="readme.txt" optional="true">D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup\Eyelid_Tracking\for_testing\readme.txt</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2017a</root>
+      <toolboxes>
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
