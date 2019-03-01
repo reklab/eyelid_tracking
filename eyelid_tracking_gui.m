@@ -129,6 +129,7 @@ if nPars ~= 1
     % This case will include parallel computing
     % In this case, no ROI was defined in the past. User will now define it
     
+
     % Loading first frame:
     frame1 = imread([folder '\' sortedStruct(1).name(1:end-(length(suffix)+1)) '.' suffix]);
     
@@ -147,6 +148,9 @@ if nPars ~= 1
     full_blink_marker = zeros(nPars,lag_length);
     
     tic
+    
+    hbar = parfor_progressbar(nPars,'Please wait...'); %create the progress bar 
+    
     parfor i = 1:nPars
         
         %     frSk = -1; skipLen = 140;
@@ -246,9 +250,11 @@ if nPars ~= 1
         end
         eyeSig(i,:) = tmp;
         full_blink_marker(i,:) = tmp_blink;
-        
+        hbar.iterate(1); % update progress by one iteration 
     end
-    
+    close(hbar); % close the progress bar
+
+
 elseif nPars == 1
     
     % in case we don't want parallel running (nPars == 1)
