@@ -450,7 +450,8 @@ elseif nPars == 1
         % output. The code is essentially the same, excluding plotting parts.
         % There's no visual feedback in this case, except for the message every
         % 500 frames.
-        
+        hbar = waitbar(0,'Tracking, please wait...');
+
         while fr < frames-5
             
             % loading the next relevant frame
@@ -534,7 +535,9 @@ elseif nPars == 1
             if mod(fr,501)==0
                 disp(['Frame number: ' num2str(fr) '/' num2str(frames)]);
             end
+            waitbar(fr/frames,hbar)
         end
+        close(hbar);
     end   
     
 end
