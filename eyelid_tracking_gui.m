@@ -229,17 +229,11 @@ if nPars ~= 1
                 % meaning, there was an ellipse found (area non zero)
                 %             eyeSig(i,fr) = minorAxis;
                 tmp(fr) = minorAxis;
-                %             areaSig(fr) = curArea;
-                %             ctrSigX(fr) = prevCenter(1);
-                %             ctrSigY(fr) = prevCenter(2);
             else
                 % meaning, no ellipse was detected -> area is zero and eye
                 % is completley closed (axis = 0)
                 %             eyeSig(i,fr) = 0;
                 tmp(fr) = 0;
-                %             areaSig(fr) = 0;
-                %             ctrSigX(fr) = prevCenter(1);
-                %             ctrSigY(fr) = prevCenter(2);
                 
             end
             %         end
@@ -384,16 +378,10 @@ elseif nPars == 1
                     if isempty(tmpMinAx) == 0
                         % meaning, there was an ellipse found (area non zero)
                         eyeSig(frSk) = tmpMinAx;
-                        areaSig(frSk) = tmpCurArea;
-                        ctrSigX(frSk) = prevCenter(1);
-                        ctrSigY(frSk) = prevCenter(2);
                     else
                         % meaning, no ellipse was detected -> area is zero and eye
                         % is completley closed (axis = 0)
                         eyeSig(frSk) = 0;
-                        areaSig(frSk) = 0;
-                        ctrSigX(frSk) = prevCenter(1);
-                        ctrSigY(frSk) = prevCenter(2);
                     end
                     
                     tmpIter = 15;
@@ -424,19 +412,11 @@ elseif nPars == 1
                 
                 % meaning, there was an ellipse found (area non zero)
                 eyeSig(fr) = minorAxis;
-                areaSig(fr) = curArea;
-                ctrSigX(fr) = prevCenter(1);
-                ctrSigY(fr) = prevCenter(2);
-                
             else
                 
                 % meaning, no ellipse was detected -> area is zero and eye
                 % is completley closed (axis = 0)
                 eyeSig(fr) = 0;
-                areaSig(fr) = 0;
-                ctrSigX(fr) = prevCenter(1);
-                ctrSigY(fr) = prevCenter(2);
-                
             end
             
             
@@ -507,16 +487,10 @@ elseif nPars == 1
                     if isempty(tmpMinAx) == 0
                         % meaning, there was an ellipse found (area non zero)
                         eyeSig(frSk) = tmpMinAx;
-                        areaSig(frSk) = tmpCurArea;
-                        ctrSigX(frSk) = prevCenter(1);
-                        ctrSigY(frSk) = prevCenter(2);
                     else
                         % meaning, no ellipse was detected -> area is zero and eye
                         % is completley closed (axis = 0)
                         eyeSig(frSk) = 0;
-                        areaSig(frSk) = 0;
-                        ctrSigX(frSk) = prevCenter(1);
-                        ctrSigY(frSk) = prevCenter(2);
                     end
                     tmpIter = 15;
                     
@@ -560,3 +534,98 @@ elseif nPars == 1
 end
 disp('Elapsed tracking time is: ')
 toc
+
+%% Reassign values to the original signal
+if nPars ~= 1
+    eyeSig_combined = zeros(1,frames);
+    full_blink_start =[];
+    for j = 1:nPars
+        eyeSig_combined(fr_start(j):fr_start(j)+lag_length-1) = eyeSig(j,:);
+        full_blink_start = [full_blink_start, find(full_blink_marker(j,:)~=0)+(lag_length*(j-1))];
+    end
+else
+    eyeSig_combined = eyeSig;
+end
+
+%% Detect full blinks in case of parallel computing
+
+if nPars ~= 1
+    if isempty(full_blink_start)==0
+        % in this case, there were full blinks
+        
+        % setting the initial contour once again since it's not available from
+        % the parfor
+        init_frame = imcrop(imread([folder '\' sortedStruct(fr_start(1)).name(1:end-(length(suffix)+1)) '.' suffix]),rect);
+        [prevCenter,maxArea,zeroMask,origAngle,HSVranges] = init_partition(init_frame,user_init,gs);
+        zeroCenter = prevCenter;
+        for k = 1:length(full_blink_start)
+            
+            %         curCenter = prevCenter;
+            skipLen = 140;
+            tmpPrvMsk = zeroMask;
+            tmpIter = 50;
+            
+            for frSk = full_blink_start(k)+skipLen:-2:full_blink_start(k)
+                
+                frameInTmp = imread([folder '\' sortedStruct(frSk).name(1:end-(length(suffix)+1)) '.' suffix]);
+                frameTmp = imcrop(frameInTmp,rect); % rect is xmin ymin width and height
+                clear frameInTmp
+                
+                [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, ~, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 0, 1, tmpIter, zeroCenter, HSVranges, gs);
+                
+                % Dealing with empty axes:
+                
+                if isempty(tmpMinAx) == 0
+                    % meaning, there was an ellipse found (area non zero)
+                    eyeSig_combined(frSk) = tmpMinAx;
+                else
+                    % meaning, no ellipse was detected -> area is zero and eye
+                    % is completley closed (axis = 0)
+                    eyeSig_combined(frSk) = 0;
+                end
+                tmpIter = 15;
+                disp(['Done with ' num2str((1-(frSk-full_blink_start(k))/skipLen)*100)...
+                    '% of blink ' num2str(k) ' of ' num2str(length(full_blink_start)) '!'])
+            end
+        end
+    else
+        % no full blinks detected
+        disp('No full blinks were detected');
+    end
+end
+
+%% Output post processing and export
+
+% Converting NaNs into actual data
+
+t = 1/fps:1/fps:frames/fps;
+tOdd = t(1:2:end-5);
+
+eyeSig_final = naninterp(eyeSig_combined(1:2:end-5));
+%areaSig_final = naninterp(areaSig(1:2:end-5));
+%ctrSig_final = cell(1,2);
+%ctrSig_final{1} = ctrSigX(1:2:end-5);
+%ctrSig_final{2} = ctrSigY(1:2:end-5);
+[nBlinks, blink_inds] = mark_blinks(tOdd,eyeSig_final,1);
+
+signal_output_mat = cell(4,2);
+signal_output_mat{1,1} = eyeSig_final;
+signal_output_mat{1,2} = eyeSig;
+%signal_output_mat{2,1} = areaSig_final;
+%signal_output_mat{2,2} = areaSig;
+%signal_output_mat{3,1} = ctrSig_final;
+signal_output_mat{4,1} = nBlinks;
+signal_output_mat{4,2} = blink_inds;
+
+if RightLeft == 1
+    save([filename2 '_R_SigOutput'], 'signal_output_mat')
+elseif RightLeft == 2
+    save([filename2 '_L_SigOutput'], 'signal_output_mat')
+end
+
+
+if RightLeft == 1
+    disp('Finished running blink tracking on right eye only.')
+elseif RightLeft == 2
+    disp('Finished running blink tracking on left eye only.')
+end
