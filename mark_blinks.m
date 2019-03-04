@@ -29,7 +29,7 @@ inds = find(N==0); % finding all empty bins
 [~, maxind] = max(N); % index of maximum point in histogram
 for i = 1:length(inds)
     if inds(i) > maxind 
-        threshold = edges(inds(i+10));
+        threshold = edges(inds(i)+10);
         break;
     end
 end
