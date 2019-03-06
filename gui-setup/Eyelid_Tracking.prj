@@ -3,7 +3,7 @@
     <param.appname>Eyelid_Tracking</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.0</param.version>
+    <param.version>1.2</param.version>
     <param.authnamewatermark>Guy Tsror</param.authnamewatermark>
     <param.email>guy.tsror@mail.mcgill.ca</param.email>
     <param.company>McGill University</param.company>
@@ -37,7 +37,6 @@ The application can produce output signals describing eyelid movement, and video
     <unset>
       <param.icon />
       <param.icons />
-      <param.version />
       <param.screenshot />
       <param.guid />
       <param.installpath.combo />
@@ -79,7 +78,7 @@ The application can produce output signals describing eyelid movement, and video
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\plot_ellipse.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\relevant_eye.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\relevant_eye_gs.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortJPEGs.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortJPEGs2.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortStruct.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\tiff2jpg.m</file>
     </fileset.depfun>
