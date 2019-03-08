@@ -11,6 +11,28 @@ clear signal_output_mat
 load([path file_R]);
 sig_R = signal_output_mat{1,1};
 
+%% Figures for paper:
+fps = 500;
+frames = signal_output_mat{3,1};
+if iscell(frames) == 1 || isempty(frames)
+    frames = 60000;
+end
+t = 1/fps:1/fps:frames/fps;
+tOdd = t(1:2:end-5);
+
+% eyes plot
+
+figure(1)
+plot(tOdd, sig_L,'color','blue');
+hold on;
+plot(tOdd, sig_R,'color','red');
+grid on;
+xlabel('Time [sec]');
+ylabel('Eye minor-axis length [px]');
+hold off;
+legend('Left Eye','Right Eye')
+
+%% For personal analysis
 %% Plotting both
 
 fps = 500;
