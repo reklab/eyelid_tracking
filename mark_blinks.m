@@ -22,14 +22,14 @@ nbins = 500;
 % finding the histogram counts for the flipped signals
 [N,edges] = histcounts(flip_sig,nbins);
 
-% defining the threshold - taking the 10th empty bin's edge after the histogram peak
+% defining the threshold - taking the 5th empty bin's edge after the histogram peak
 % and setting as the threshold 
 
 inds = find(N==0); % finding all empty bins
 [~, maxind] = max(N); % index of maximum point in histogram
 for i = 1:length(inds)
     if inds(i) > maxind 
-        threshold = edges(inds(i)+10);
+        threshold = edges(inds(i)+5);
         break;
     end
 end
