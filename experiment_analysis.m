@@ -41,8 +41,6 @@ title('Right Eye Output - Select Blinks')
 [t_blink_R, y_blink_R] = getpts;
 
 close all;
-
-save([file_L(1:19) '_blinks'], 't_blink_L', 'y_blink_L', 't_blink_R', 'y_blink_R')
 %% combining plot
 
 figure(1)
@@ -122,7 +120,8 @@ hold on;
 scatter(t_blink_L,y_blink_L,'o','MarkerEdgeColor','cyan')
 scatter(t_blink_R,y_blink_R,'o','MarkerEdgeColor','magenta')
 title('Output Signals, both eyes');
-legend('Left Eye','Right Eye')
+legend(['Left Eye, ', num2str(length(t_blink_L)), ' blinks'],...
+    ['Right Eye, ', num2str(length(t_blink_L)), ' blinks'])
    
 subplot(3,2,3)
 [correl,lag] = correl_sigs(sig_L,sig_R,fps,1);
@@ -167,3 +166,4 @@ saveas(final_fig,[file_L(1:19) '_fig.jpg']);
 % Exporting the blinks detected:
 save([file_L(1:19) '_blinks'], 't_blink_L', 'y_blink_L', 't_blink_R', 'y_blink_R')
 
+close all
