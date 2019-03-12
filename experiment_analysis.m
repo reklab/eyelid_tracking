@@ -121,7 +121,7 @@ ylabel('Eye minor-axis length [px]');
 hold on;
 scatter(t_blink_L,y_blink_L,'o','MarkerEdgeColor','cyan')
 scatter(t_blink_R,y_blink_R,'o','MarkerEdgeColor','magenta')
-hold off;
+title('Output Signals, both eyes');
 legend('Left Eye','Right Eye')
    
 subplot(3,2,3)
@@ -155,3 +155,15 @@ subplot(3,2,6)
 plot(eye_irf); grid on;
 ylabel('IRF');
 title(['IRF Model, ' num2str(nLags) ' lags']);
+
+final_fig = gcf();
+
+%% Export all:
+
+% Exporting the figure to jpg and fig:
+saveas(final_fig,[file_L(1:19) '_fig.fig']);
+saveas(final_fig,[file_L(1:19) '_fig.jpg']);
+
+% Exporting the blinks detected:
+save([file_L(1:19) '_blinks'], 't_blink_L', 'y_blink_L', 't_blink_R', 'y_blink_R')
+
