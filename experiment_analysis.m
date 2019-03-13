@@ -1,6 +1,7 @@
 % ANALYSIS FILE - BLINKS IN INJURED AND HEALTHY RATS % 
 
 %% Load data from both sides of face
+clear all
 
 [file_L, path] = uigetfile('*.mat','Please Select Left Eye');
 load([path file_L]);
@@ -41,8 +42,17 @@ title('Right Eye Output - Select Blinks')
 [t_blink_R, y_blink_R] = getpts;
 
 close all;
-%% combining plot
 
+%% SHORT VERSION (Skip interim plots)
+
+left = nldat(sig_L', 'domainIncr',1/fps);
+right = nldat(sig_R', 'domainIncr',1/fps);
+spec_L = spect(left-mean(left));
+spec_R = spect(right-mean(right));
+nLags = 200;
+eye_irf = irf(cat(2,left,right),'nLags',nLags,'nSides',2);
+%% LONG VERSION
+%% combining plot
 figure(1)
 plot(tOdd, sig_L,'color','blue');
 hold on;
@@ -55,25 +65,17 @@ scatter(t_blink_L,y_blink_L,'o','MarkerEdgeColor','cyan')
 scatter(t_blink_R,y_blink_R,'o','MarkerEdgeColor','magenta')
 hold off;
 legend('Left Eye','Right Eye')
-
 %% Conversion to nldat
-
 left = nldat(sig_L', 'domainIncr',1/fps);
 right = nldat(sig_R', 'domainIncr',1/fps);
-
-
 %% Correlation inspection
 figure(2)
 [correl,lag] = correl_sigs(sig_L,sig_R,fps,1);
-
 % possibly, delay could be inferred from the peak location
-
 %% Frequency content inspection
 figure(3)
 spec_L = spect(left-mean(left));
 spec_R = spect(right-mean(right));
-
-% subplot 221
 semilogx(spec_L); 
 xlabel('Frequency [Hz]'); ylabel('Spectrum');
 grid on;
@@ -82,9 +84,7 @@ semilogx(spec_R);
 title('Frequency Content, DC removed');
 legend('Left Spectrum','Right Spectrum');
 xlim([0 250])
-
 %% histogram of both eyes, superimposed
-
 figure(4)
 histogram(sig_L,150,'FaceColor','blue','FaceAlpha',0.55,'EdgeAlpha',0,'Normalization','probability')
 hold on;
@@ -93,17 +93,13 @@ grid on;
 xlabel('Eyelids Distance [px]'); ylabel('PDF');
 legend('Left Eye','Right Eye')
 hold off;
-
 %% IRF per experiment:
-
 nLags = 200;
 eye_irf = irf(cat(2,left,right),'nLags',nLags,'nSides',2);
-
 figure(5)
 plot(eye_irf); grid on;
 ylabel('IRF');
 title(['IRF Model, ' num2str(nLags) ' lags']);
-
 %% Plotting all in a single exportable figure
 
 close all
@@ -121,7 +117,7 @@ scatter(t_blink_L,y_blink_L,'o','MarkerEdgeColor','cyan')
 scatter(t_blink_R,y_blink_R,'o','MarkerEdgeColor','magenta')
 title('Output Signals, both eyes');
 legend(['Left Eye, ', num2str(length(t_blink_L)), ' blinks'],...
-    ['Right Eye, ', num2str(length(t_blink_L)), ' blinks'])
+    ['Right Eye, ', num2str(length(t_blink_R)), ' blinks'])
    
 subplot(3,2,3)
 [correl,lag] = correl_sigs(sig_L,sig_R,fps,1);
