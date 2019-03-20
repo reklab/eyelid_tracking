@@ -49,7 +49,7 @@ if answer{1} == '0'
     else
         % File does not exist, will be created now:
         disp('Sorting files to chronological order...');
-        [frames, sortedStruct] = sortJPEGs();
+        [frames, sortedStruct] = sortJPEGs2(folder, suffix);
     end
     
 elseif answer{1} == '1'
@@ -147,7 +147,7 @@ if nPars ~= 1
     skipLen = 140;
     full_blink_marker = zeros(nPars,lag_length);
     
-    tic
+%     tic
     
     hbar = parfor_progressbar(nPars,'Please wait...'); %create the progress bar 
     
@@ -460,6 +460,12 @@ elseif nPars == 1
             frame = imcrop(frameIn,rect);
             clear frameIn
             
+            
+            if fr > 4780 && fr < 4799
+                disp('Debug starts here')
+            end
+            
+            
             if fr>2 && isnan(eyeSig(fr-2))==1
                 iter = 30;
                 [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track(frame, maxArea, zeroMask, zeroCenter, origAngle, 0, inBlink, iter, zeroCenter, HSVranges, gs);
@@ -542,7 +548,7 @@ elseif nPars == 1
     
 end
 disp('Elapsed tracking time is: ')
-toc
+% toc
 
 %% Reassign values to the original signal
 if nPars ~= 1
@@ -622,6 +628,7 @@ signal_output_mat{1,1} = eyeSig_final;
 signal_output_mat{1,2} = eyeSig;
 %signal_output_mat{2,1} = areaSig_final;
 %signal_output_mat{2,2} = areaSig;
+signal_output_mat{3,1} = frames;
 %signal_output_mat{3,1} = ctrSig_final;
 signal_output_mat{4,1} = nBlinks;
 signal_output_mat{4,2} = blink_inds;

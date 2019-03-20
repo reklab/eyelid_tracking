@@ -52,7 +52,7 @@ clear I1 tmp1 tmp2 I;
 % Blurring image with a gaussian filter to lose the smaller irrelevant
 % edges
 
-B = imgaussfilt(I2,6);
+B = imgaussfilt(I2,2);
 
 %% Tracking
 
