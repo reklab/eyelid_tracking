@@ -1,4 +1,4 @@
-function [minor,ctr,area,contour,inBlink,isClosed] = contour_track_single(frame, maxArea, prevMask, prevCenter, origAngle, plotYN, inBlink, iter, zeroCenter, HSVranges, gs, prevMinor, prevArea)
+function [minor,ctr,area,contour,inBlink,isClosed] = contour_track(frame, maxArea, prevMask, prevCenter, origAngle, plotYN, inBlink, iter, zeroCenter, HSVranges, gs)
 
 % This function uses the built in activecontour function from Matlab's
 % image processing toolbox, to track the edges of a rodent in a video
@@ -76,22 +76,6 @@ centerYrange = [prevCenter(2)-25 prevCenter(2)+25];
 [minor, ctr, ind, flag, area] = extract_ellipse(origAngle,maxArea,totElpsFound,centerXrange,centerYrange,zeroCenter,stats);
 % At this point, output measures received from extract_ellipse describe an
 % ellipse that fits the eye OR a NaN, in case no ellipse was found to match
-
-
-% Handling unexpected jumps during blinks:
-if inBlink == 1
-    % in case we're during a blink, we want to validate there is not false
-    % big area error
-    if minor > prevMinor*1.8
-        % in this case - there was a significant jump and it is likely an
-        % error, we there fore change the new minor to be equal to the
-        % previous one, and take prevMask as the contour
-        minor = prevMinor;
-        contour = prevMask;
-        area = prevArea;
-    end
-end
-
 
 
 %% Blink stage - handling full blinks happening in the frame:
