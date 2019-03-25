@@ -93,13 +93,30 @@ grid on;
 xlabel('Eyelids Distance [px]'); ylabel('PDF');
 legend('Left Eye','Right Eye')
 hold off;
+%% VAF calculations:
+vaf_right = cell(1,200); j=0;
+j=0;
+for ii = 5:5:1000
+    j = j+1;
+    irf2= irf(cat(2,left',right'),'nLags',ii,'nSides',2);
+    right_pred = nlsim(irf2,left);
+    vaf_right{j} = vaf(right_pred,right);
+    disp(['Finished ' num2str(j) ' runs']);
+end
+for i=1:200
+    VAFsig(i) = vaf_right{i}.dataSet;
+end
+
 %% IRF per experiment:
-nLags = 200;
+[~, lagind] = max(VAFsig);
+ii = 5:5:1000;
+nLags = ii(lagind);
 eye_irf = irf(cat(2,left,right),'nLags',nLags,'nSides',2);
 figure(5)
 plot(eye_irf); grid on;
 ylabel('IRF');
 title(['IRF Model, ' num2str(nLags) ' lags']);
+
 %% Plotting all in a single exportable figure
 
 close all
@@ -147,9 +164,11 @@ title('PDF of both eyes')
 hold off;
 
 subplot(3,2,6)
-plot(eye_irf); grid on;
-ylabel('IRF');
-title(['IRF Model, ' num2str(nLags) ' lags']);
+plot(ii,VAFsig);
+grid on;
+xlabel('Number of lags');
+ylabel('VAF [%]');
+title('Variance Accounted For');
 
 final_fig = gcf();
 
