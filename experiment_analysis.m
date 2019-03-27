@@ -5,14 +5,12 @@ clear all
 
 [file_L, path] = uigetfile('*.mat','Please Select Left Eye');
 load([path file_L]);
-sig_L = signal_output_mat{1,1};
+orig_sig_L = signal_output_mat{1,1};
 clear signal_output_mat
 
 [file_R, path] = uigetfile('*.mat','Please Select Right Eye');
 load([path file_R]);
-sig_R = signal_output_mat{1,1};
-
-%% eyelid movement figure:
+orig_sig_R = signal_output_mat{1,1};
 
 fps = 500;
 frames = signal_output_mat{3,1};
@@ -22,6 +20,36 @@ end
 t = 1/fps:1/fps:frames/fps;
 tOdd = t(1:2:end-5);
 
+%% FILTERING OPTIONAL:
+
+% in case of filtering:
+f_cutoff = 100; % 100hz
+w_cutoff = f_cutoff*2/fps; % excluding the pi since the filter code includes it
+f_pass = 30; % 20 hz
+w_pass = f_pass*2/fps; % excluding the pi since the filter code includes it
+
+% defining the filter:
+filt_design = fdesign.lowpass('Fp,Fst,Ap,Ast',w_pass,w_cutoff,1,60);
+Hd = design(filt_design,'cheby2');
+% fvtool(Hd)
+
+% filtering the signals
+sig_L = filter(Hd,orig_sig_L);
+sig_R = filter(Hd,orig_sig_R);
+
+% plotting before and after, removing the delay
+subplot 211
+plot(tOdd,orig_sig_L); hold on;
+plot(tOdd,sig_L); legend('Original','Filtered'); grid on;
+subplot 212
+plot(tOdd,orig_sig_R); hold on;
+plot(tOdd,sig_R); legend('Original','Filtered'); grid on;
+
+% removing the first 0.5 seconds :
+tOdd = tOdd(125:end);
+sig_R = sig_R(125:end);
+sig_L = sig_L(125:end);
+%% eyelid movement figure:
 % eyes plot
 uiwait(msgbox('In the next two figures, please select all blink peak points. You may double click to finish selection, or use backspace to remove last picked point.'));
 
@@ -45,10 +73,10 @@ close all;
 
 %% SHORT VERSION (Skip interim plots)
 
-left = nldat(sig_L', 'domainIncr',1/fps);
-right = nldat(sig_R', 'domainIncr',1/fps);
-spec_L = spect(left-mean(left));
-spec_R = spect(right-mean(right));
+left = nldat(sig_L'-mean(sig_L'), 'domainIncr',1/fps);
+right = nldat(sig_R'-mean(sig_R'), 'domainIncr',1/fps);
+spec_L = spect(left);%-mean(left));
+spec_R = spect(right);%-mean(right));
 nLags = 200;
 eye_irf = irf(cat(2,left,right),'nLags',nLags,'nSides',2);
 %% LONG VERSION
@@ -107,8 +135,13 @@ for i=1:200
     VAFsig(i) = vaf_right{i}.dataSet;
 end
 
+% Calculating CCC:
+get_ccc = f_CCC([left.dataSet, right.dataSet],0.05);
+CCC = get_ccc{1}.est;
+Pea = get_ccc{1}.pearsonCorrCoeff;
+
 %% IRF per experiment:
-[~, lagind] = max(VAFsig);
+[maxVAF, lagind] = max(VAFsig);
 ii = 5:5:1000;
 nLags = ii(lagind);
 eye_irf = irf(cat(2,left,right),'nLags',nLags,'nSides',2);
@@ -116,7 +149,6 @@ figure(5)
 plot(eye_irf); grid on;
 ylabel('IRF');
 title(['IRF Model, ' num2str(nLags) ' lags']);
-
 %% Plotting all in a single exportable figure
 
 close all
@@ -138,7 +170,7 @@ legend(['Left Eye, ', num2str(length(t_blink_L)), ' blinks'],...
    
 subplot(3,2,3)
 [correl,lag] = correl_sigs(sig_L,sig_R,fps,1);
-title('Correlation between eyes')
+title(['Correlation; Pearson:' num2str(Pea) ', CCC:' num2str(CCC)]);
 xlabel('Lag [sec]')
 ylabel('Correlatiaon')
 set(gca,'fontsize',10)
@@ -164,11 +196,13 @@ title('PDF of both eyes')
 hold off;
 
 subplot(3,2,6)
+[maxVAF, lagind] = max(VAFsig);
+ii = 5:5:1000;
 plot(ii,VAFsig);
 grid on;
 xlabel('Number of lags');
 ylabel('VAF [%]');
-title('Variance Accounted For');
+title(['Variance Accounted For; Max ' num2str(maxVAF) '%']);
 
 final_fig = gcf();
 
