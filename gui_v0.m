@@ -22,7 +22,7 @@ function varargout = gui_v0(varargin)
 
 % Edit the above text to modify the response to help gui_v0
 
-% Last Modified by GUIDE v2.5 01-Apr-2019 11:57:00
+% Last Modified by GUIDE v2.5 01-Apr-2019 13:53:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,6 +58,12 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+axes(handles.image_place)
+matlabImage = imread('eye_sketch.jpg');
+image(matlabImage)
+axis off
+axis image
+
 % UIWAIT makes gui_v0 wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -88,6 +94,7 @@ if strcmp(roi,'ROI Not Set') || strcmp(roi,'No')
 else
     roi_set = 1;
 end
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -209,6 +216,8 @@ function menu_rgb_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from menu_rgb
 contents = cellstr(get(hObject,'String'));
 rgb = contents{get(hObject,'Value')};
+handles.rgb = rgb;
+guidata(hObject,handles)
 
 
 function txt_fname_Callback(hObject, eventdata, handles)
@@ -239,15 +248,43 @@ function btn_launch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 definput = {'0','0','your_file','1','0','RGB','jpg','500'};
-RightLeft = a;
-color = rgb;
-suffix = format;
-roi_Need = roi_set;
+
+% RGB / GRAY:
+cont_rgb = handles.menu_rgb.get('String');
+color = cont_rgb{get(handles.menu_rgb,'Value')};
+
+% FORMAT JPG:
+
+cont_format = handles.menu_format.get('String');
+suffix = cont_format{get(handles.menu_format,'Value')};
+
+% ROI:
+cont_roi = handles.menu_roi.get('String');
+roi = cont_roi{get(handles.menu_roi,'Value')};
+if strcmp(roi,'ROI Not Set') || strcmp(roi,'No')
+    roi_Need = 0;
+else
+    roi_Need = 1;
+end
+
 fps = fps_input;
 
 
-% --------------------------------------------------------------------
-function Untitled_1_Callback(hObject, eventdata, handles)
-% hObject    handle to Untitled_1 (see GCBO)
+% --- Executes on button press in radio_right.
+function radio_right_Callback(hObject, eventdata, handles)
+% hObject    handle to radio_right (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+RightLeft = 1;
+
+% Hint: get(hObject,'Value') returns toggle state of radio_right
+
+
+% --- Executes on button press in radio_left.
+function radio_left_Callback(hObject, eventdata, handles)
+% hObject    handle to radio_left (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+RightLeft = 2;
+
+% Hint: get(hObject,'Value') returns toggle state of radio_left
