@@ -1,4 +1,4 @@
-function [] = eyelid_tracking_gui()
+function [] = eyelid_tracking_gui(roi_Need,fps,vidYN,color,suffix,RightLeft,filename2)
 
 % Initialization Dialogue:
 
@@ -11,36 +11,39 @@ function [] = eyelid_tracking_gui()
 % GS or RGB frames
 % File format in the folder
 
-answer{1} = '2';
+% answer{1} = '2';
+% 
+% while answer{1} ~= '0' && answer{1} ~= '1'
+%     prompt = {'Conversion from tiff to jpeg required? Enter 0/1',...
+%         'ROI already set? Enter 1/0','Output file name'...
+%         'Right or left eye? 1-R, 2-L'...
+%         'Save video? Enter 1/0'...
+%         'GS or RGB?'...
+%         'jpeg, jpg, JPEG or JPG?'...
+%         'Frame rate?'};
+%     title = 'File Loading';
+%     dims = [1 35];
+%     definput = {'0','0','your_file','1','0','RGB','jpg','500'};
+%     answer = inputdlg(prompt,title,dims,definput);
+%     filename2 = answer{3};
+%     RightLeft = str2double(answer{4});
+%     vidYN = str2double(answer{5});
+%     color = answer{6};
+%     suffix = answer{7};
+%     roi_Need = answer{2};
+%     fps = str2double(answer{8});
+% end
 
-while answer{1} ~= '0' && answer{1} ~= '1'
-    prompt = {'Conversion from tiff to jpeg required? Enter 0/1',...
-        'ROI already set? Enter 1/0','Output file name'...
-        'Right or left eye? 1-R, 2-L'...
-        'Save video? Enter 1/0'...
-        'GS or RGB?'...
-        'jpeg, jpg, JPEG or JPG?'...
-        'Frame rate?'};
-    title = 'File Loading';
-    dims = [1 35];
-    definput = {'0','0','your_file','1','0','RGB','jpg','500'};
-    answer = inputdlg(prompt,title,dims,definput);
-    filename2 = answer{3};
-    RightLeft = str2double(answer{4});
-    vidYN = str2double(answer{5});
-    color = answer{6};
-    suffix = answer{7};
-    roi_Need = answer{2};
-    fps = str2double(answer{8});
-end
+% THE GUI IS SETTING UP THE INITIAL PARAMETERS
 
 % loading the files:
+convert_tiff = 0;
 
-if answer{1} == '0'
+if convert_tiff == 0
     % in this case, files are already in jpeg. User will be requested to
     % pick folder containing jpeg files.
     
-    folder = uigetdir('C:\','Select jpeg folder');
+    folder = uigetdir('C:\','Select jpeg folder containing frames:');
     frames = length(dir([folder '/*.' suffix]));
     if exist([folder '\files_struct.mat'], 'file')
         
@@ -52,7 +55,7 @@ if answer{1} == '0'
         [frames, sortedStruct] = sortJPEGs2(folder, suffix);
     end
     
-elseif answer{1} == '1'
+elseif convert_tiff == 1
     % in this case conversion from tiff to jpeg is needed.
     
     [folder, frames, sortedStruct] = tiff2jpg();
@@ -258,7 +261,7 @@ if nPars ~= 1
 elseif nPars == 1
     
     % in case we don't want parallel running (nPars == 1)
-    if roi_Need == '0'
+    if roi_Need == 0
         
         % In this case, no ROI was defined in the past. User will now define it
         
@@ -266,7 +269,7 @@ elseif nPars == 1
         frame1 = imread([folder '\' sortedStruct(1).name(1:end-(length(suffix)+1)) '.' suffix]);
         
         % User to crop ROI. Same ROI will be used for all frames in video
-        
+        figure()
         [frROI, rect] = imcrop(frame1); % rect: [xmin,ymin,width,height]
         close all;
         
@@ -347,16 +350,26 @@ elseif nPars == 1
             % using prevMask, it will use zeroMask, and instead 15 iterations,
             % it will use 30 iterations.
             
+%             if fr>2 && isnan(eyeSig(fr-2))==1
+%                 % case more than a single NaN in a row
+%                 iter = 30;
+%                 [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, eyeSig(fr-2));
+%                 iter = 15;
+%             else
+%                 [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, eyeSig(fr-2));
+%                 iter = 15;
+%             end
             if fr>2 && isnan(eyeSig(fr-2))==1
-                % case more than a single NaN in a row
                 iter = 30;
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, eyeSig(fr-2));
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, zeroMask, zeroCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, eyeSig(fr-2), areaSig(fr-2));
+                iter = 15;
+            elseif fr == 1
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, 0, 0);
                 iter = 15;
             else
-                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, eyeSig(fr-2));
+                [minorAxis, prevCenter, curArea, prevMask, inBlink, isClosed] = contour_track_single(frame, maxArea, prevMask, prevCenter, origAngle, 1, inBlink, iter, zeroCenter, HSVranges, gs, eyeSig(fr-2), areaSig(fr-2));
                 iter = 15;
             end
-            
             
             % Next if statement deals with complete blinks. if both inBlink and
             % isClosed are marked as 1, it means that the eye is fully closed.
@@ -377,7 +390,7 @@ elseif nPars == 1
                     frameTmp = imcrop(frameInTmp,rect);
                     clear frameInTmp
                     
-                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track_single(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 1, inBlink, tmpIter, zeroCenter, HSVranges, gs, eyeSig(fr-2));
+                    [tmpMinAx, prevCenter, tmpCurArea, tmpPrvMsk, inBlink, ~] = contour_track(frameTmp, maxArea, tmpPrvMsk, prevCenter, origAngle, 1, inBlink, tmpIter, zeroCenter, HSVranges, gs);
                     
                     % Dealing with empty minor axes (no ellipse detected):
                     
@@ -461,7 +474,7 @@ elseif nPars == 1
             clear frameIn
             
             
-            if fr > 4775 && fr < 4850
+            if fr > 14320 && fr < 14450
                 disp('Debug starts here')
             end
             

@@ -87,13 +87,13 @@ function menu_roi_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns menu_roi contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from menu_roi
-contents = cellstr(get(hObject,'String'))
-roi = contents{get(hObject,'Value')}
-if strcmp(roi,'ROI Not Set') || strcmp(roi,'No')
-    roi_set = 0;
-else
-    roi_set = 1;
-end
+% contents = cellstr(get(hObject,'String'))
+% roi = contents{get(hObject,'Value')}
+% if strcmp(roi,'ROI Not Set') || strcmp(roi,'No')
+%     roi_set = 0;
+% else
+%     roi_set = 1;
+% end
 
 
 
@@ -262,9 +262,9 @@ suffix = cont_format{get(handles.menu_format,'Value')};
 cont_roi = handles.menu_roi.get('String');
 roi = cont_roi{get(handles.menu_roi,'Value')};
 if strcmp(roi,'ROI Not Set') || strcmp(roi,'No')
-    roi_Need = 0;
-else
     roi_Need = 1;
+else
+    roi_Need = 0;
 end
 
 % VIDEO?
@@ -298,7 +298,7 @@ else
 end
 
 % Launching the tracking protocol:
-eyelid_tracking_gui(roi_Need,fps,vidYN,color,suffix,RightLeft,filename2)
+eyelid_tracking_gui(roi_Need,fps,vidYN,color,suffix,right_left,fname)
 
 
 % --- Executes on button press in radio_right.
