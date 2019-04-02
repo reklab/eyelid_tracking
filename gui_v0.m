@@ -143,12 +143,12 @@ function txt_fps_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of txt_fps as text
 %        str2double(get(hObject,'String')) returns contents of txt_fps as a double
-try
-    fps_input = str2double(get(hObject,'String'));
-catch
-    ed = errordlg('Input must be a number','Error');
-    uiwait(ed);
-end
+% try
+%     fps_input = str2double(get(hObject,'String'));
+% catch
+%     ed = errordlg('Input must be a number','Error');
+%     uiwait(ed);
+% end
 
 
 
@@ -173,13 +173,13 @@ function menu_export_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns menu_export contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from menu_export
-contents = cellstr(get(hObject,'String'));
-export_yn = contents{get(hObject,'Value')};
-if strcmp(export_yn,'Yes')
-    vidYN = 1;
-else
-    vidYN = 0;
-end
+% contents = cellstr(get(hObject,'String'));
+% export_yn = contents{get(hObject,'Value')};
+% if strcmp(export_yn,'Yes')
+%     vidYN = 1;
+% else
+%     vidYN = 0;
+% end
 
 % --- Executes during object creation, after setting all properties.
 function menu_export_CreateFcn(hObject, eventdata, handles)
@@ -214,10 +214,10 @@ function menu_rgb_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns menu_rgb contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from menu_rgb
-contents = cellstr(get(hObject,'String'));
-rgb = contents{get(hObject,'Value')};
-handles.rgb = rgb;
-guidata(hObject,handles)
+% contents = cellstr(get(hObject,'String'));
+% rgb = contents{get(hObject,'Value')};
+% handles.rgb = rgb;
+% guidata(hObject,handles)
 
 
 function txt_fname_Callback(hObject, eventdata, handles)
@@ -227,7 +227,7 @@ function txt_fname_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of txt_fname as text
 %        str2double(get(hObject,'String')) returns contents of txt_fname as a double
-filename2 = get(hObject,'String');
+% filename2 = get(hObject,'String');
 
 % --- Executes during object creation, after setting all properties.
 function txt_fname_CreateFcn(hObject, eventdata, handles)
@@ -267,7 +267,38 @@ else
     roi_Need = 1;
 end
 
-fps = fps_input;
+% VIDEO?
+cont_export = handles.menu_export.get('String');
+export_yn = cont_export{get(handles.menu_export,'Value')};
+if strcmp(export_yn,'Yes')
+    vidYN = 1;
+else
+    vidYN = 0;
+end
+
+% FPS: 
+try
+    fps = str2double(get(handles.txt_fps,'String'));
+catch
+    ed = errordlg('Input must be a number','Error');
+    uiwait(ed);
+end
+
+% Filename:
+fname = handles.txt_fname.get('String');
+
+% Eye side:
+radio_right = get(handles.radio_right,'Value');
+if radio_right == 1 
+    right_left = 1;
+    % we are inspecting the right side
+else
+    % looking at left eye else
+    right_left = 2;
+end
+
+% Launching the tracking protocol:
+eyelid_tracking_gui(roi_Need,fps,vidYN,color,suffix,RightLeft,filename2)
 
 
 % --- Executes on button press in radio_right.
