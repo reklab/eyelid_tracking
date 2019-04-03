@@ -93,7 +93,9 @@ videofile_path = ['crush_videos_from_zip/2019_01_07/animal_4/2019_01_07_animal_4
 videofile_path = ['crush_videos_from_zip/2019_01_07/animal_6/2019_01_07_animal_6.mp4']
 videofile_path = ['crush_videos_from_zip/2019_01_09/animal_2/2019_01_09_animal_2.mp4']
 videofile_path = ['crush_videos_from_zip/2019_01_09/animal_1/2019_01_09_animal_1.mp4']
-
+videofile_path = ['crush_videos_from_zip/2019_01_14/animal_1/2019_01_14_animal_1.mp4']
+videofile_path = ['crush_videos_from_zip/2019_01_14/animal_2/2019_01_14_animal_2.mp4']
+videofile_path = ['crush_videos_from_zip/2019_02_07/animal_1/2019_02_07_animal_1.mp4']
 
 deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
 
@@ -111,6 +113,8 @@ deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_07\\\\animal_6\\2019_01_07_animal_6.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_09\\\\animal_2\\2019_01_09_animal_2.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_09\\\\animal_1\\2019_01_09_animal_1.mp4'], save_frames=True)
+deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_14\\\\animal_1\\2019_01_14_animal_1.mp4'], save_frames=True)
+deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_14\\\\animal_2\\2019_01_14_animal_2.mp4'], save_frames=True)
 
 
 

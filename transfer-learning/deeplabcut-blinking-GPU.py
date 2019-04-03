@@ -9,12 +9,21 @@ Created on Mon Jan 28 15:40:32 2019
 
 import deeplabcut
 import matplotlib
+import tensorflow as tf
 
 task='eyes_only' # Enter the name of your experiment Task
-experimenter='Guy-gpu' # Enter the name of the experimenter
-video=['videos/animal_3_video_2_150fps_correct.mp4', 'videos/march_8_animal_1_video_150fps_correct.mp4'] # Enter the paths of your videos you want to grab frames from.
+sides='lr-gpu' # Enter the name of the experimenter
 
-deeplabcut.create_new_project(task,experimenter,video, working_directory='dlc-blinking/an3_vid2_full',copy_videos=True) #change the working directory to where you want the folders created.
+training_videos = ['dlc-blinking/blinking-lr-2019-02-06/videos/2018_03_08_animal_1_video_1b.mp4',
+                   'dlc-blinking/blinking-lr-2019-02-06/videos/2018_03_09_animal_3_video_2.mp4',
+                   'dlc-blinking/blinking-lr-2019-02-06/videos/2019_01_07_animal_2.mp4',
+                   'dlc-blinking/blinking-lr-2019-02-06/videos/2019_01_07_animal_3.mp4',
+                   'dlc-blinking/blinking-lr-2019-02-06/videos/2019_01_07_animal_5.mp4'
+                   ]
+
+# video=['videos/animal_3_video_2_150fps_correct.mp4', 'videos/march_8_animal_1_video_150fps_correct.mp4'] # Enter the paths of your videos you want to grab frames from.
+
+deeplabcut.create_new_project(task,sides,training_videos, working_directory='dlc-blinking',copy_videos=True) #change the working directory to where you want the folders created.
 
 %matplotlib inline
 path_config_file = '/dlc-blinking/an3_vid2_full/eyes_only-Guy-gpu-2019-01-29/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
@@ -39,9 +48,10 @@ deeplabcut.train_network(path_config_file)
 deeplabcut.evaluate_network(path_config_file)
 
 # Analyzing video
-videofile_path = ['dlc-blinking/an3_vid2_full/eyes_only-Guy-2019-01-25/videos/animal_3_video_2_150fps_correct.mp4',
-                  'dlc-blinking/an3_vid2_full/eyes_only-Guy-2019-01-25/videos/march_8_animal_1_video_150fps_correct.mp4'] #Enter the list of videos to analyze.
+videofile_path = ['crush_videos_from_zip/2019_02_07/animal_1/2019_02_07_animal_1.mp4']
+
 deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
+
 
 deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2_full\\eyes_only-Guy-2019-01-25\\videos\\animal_3_video_2_150fps_correct.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2_full\\eyes_only-Guy-2019-01-25\\videos\\march_8_animal_1_video_150fps_correct.mp4'], save_frames=True)
