@@ -1,4 +1,4 @@
-function [] = eyelid_tracking_gui(roi_Need,fps,vidYN,color,suffix,RightLeft,filename2)
+function [] = eyelid_tracking_gui(roi_need,fps,vid_yn,color,suffix,right_left,fname)
 
 % Initialization Dialogue:
 
@@ -261,7 +261,7 @@ if nPars ~= 1
 elseif nPars == 1
     
     % in case we don't want parallel running (nPars == 1)
-    if roi_Need == 0
+    if roi_need == 0
         
         % In this case, no ROI was defined in the past. User will now define it
         
@@ -288,11 +288,11 @@ elseif nPars == 1
         
         % Saving the initialization file for the selected contour and ROI
         
-        if RightLeft == 1
+        if right_left == 1
             % meaning, running on right eye
-            save([filename2 '_init_R'], 'firstFrameInput')
-        elseif RightLeft == 2
-            save([filename2 '_init_L'], 'firstFrameInput')
+            save([fname '_init_R'], 'firstFrameInput')
+        elseif right_left == 2
+            save([fname '_init_L'], 'firstFrameInput')
         end
         
         % Setting baseline masks:
@@ -327,11 +327,11 @@ elseif nPars == 1
     fr = 1;   
     % Phase 3 - Active contour tracking
     
-    if vidYN == 1
+    if vid_yn == 1
         
         % In case a video output is required, this portion of code will run.
         
-        v = VideoWriter(filename2,'MPEG-4');
+        v = VideoWriter(fname,'MPEG-4');
         v.FrameRate = 150;
         v.Quality = 100;
         open(v);
@@ -649,15 +649,15 @@ signal_output_mat{3,1} = frames;
 signal_output_mat{4,1} = nBlinks;
 signal_output_mat{4,2} = blink_inds;
 
-if RightLeft == 1
-    save([filename2 '_R_SigOutput'], 'signal_output_mat')
-elseif RightLeft == 2
-    save([filename2 '_L_SigOutput'], 'signal_output_mat')
+if right_left == 1
+    save([fname '_R_SigOutput'], 'signal_output_mat')
+elseif right_left == 2
+    save([fname '_L_SigOutput'], 'signal_output_mat')
 end
 
 
-if RightLeft == 1
+if right_left == 1
     disp('Finished running blink tracking on right eye only.')
-elseif RightLeft == 2
+elseif right_left == 2
     disp('Finished running blink tracking on left eye only.')
 end
