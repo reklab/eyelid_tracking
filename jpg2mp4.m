@@ -4,9 +4,19 @@ function [] = jpg2mp4()
 % and a sortedStruct MATLAB struct file, with information regarding the
 % right order of files in the video.
 
+
+
 folder = uigetdir('D:\Guy\Dropbox (NRP)\Diego_Guy\crush_experiement\2019_01_14\');
-frames = length(dir([folder '/*.jpg']));
-load([folder '\files_struct.mat']);
+
+noStruct=0;
+if noStruct == 1
+    % if there's a need to sort the files first, run this:
+    [frames, sortedStruct] = sortJPEGs2(folder, 'jpg');
+    frames = length(dir([folder '/*.jpg']));
+else
+    % otherwise, load the filesstruct from file:
+    load([folder '\files_struct.mat']);
+end
 
 outname = inputdlg('Please enter filename, without file extension');
 v = VideoWriter(outname{1},'MPEG-4');
