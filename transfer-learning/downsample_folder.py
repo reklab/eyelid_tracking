@@ -9,7 +9,6 @@ Created on Mon Apr  8 10:15:24 2019
 
 import os
 
-
 all_files = os.listdir()
 file_prefix_list = []
 
@@ -30,6 +29,7 @@ del_ind = 0
 length = len(all_files)
 for ind,item in enumerate(all_files):
     if item.endswith(".jpg"):
+        print(ind/length*100, '%' , end="\r")
         item_no = int(item.split('_')[-1][0:-4])
         del_no = even_files_to_del[del_ind]
         if item_no == del_no:
@@ -37,7 +37,7 @@ for ind,item in enumerate(all_files):
             os.remove(item)
             del_ind +=1
             
-        print(ind/length*100, '%' , end="\r")
+        
 
             
         
