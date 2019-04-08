@@ -52,9 +52,7 @@ videofile_path = ['crush_videos_from_zip/2019_02_07/animal_1/2019_02_07_animal_1
 
 deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
 
-
-deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2_full\\eyes_only-Guy-2019-01-25\\videos\\animal_3_video_2_150fps_correct.mp4'], save_frames=True)
-deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2_full\\eyes_only-Guy-2019-01-25\\videos\\march_8_animal_1_video_150fps_correct.mp4'], save_frames=True)
+deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_02_07\\\\animal_1\\2019_02_07_animal_1.mp4'], save_frames=True)
 
 %matplotlib notebook #for making interactive plots.
 deeplabcut.plot_trajectories(path_config_file,videofile_path)

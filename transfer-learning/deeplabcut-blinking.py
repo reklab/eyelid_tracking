@@ -96,6 +96,8 @@ videofile_path = ['crush_videos_from_zip/2019_01_09/animal_1/2019_01_09_animal_1
 videofile_path = ['crush_videos_from_zip/2019_01_14/animal_1/2019_01_14_animal_1.mp4']
 videofile_path = ['crush_videos_from_zip/2019_01_14/animal_2/2019_01_14_animal_2.mp4']
 videofile_path = ['crush_videos_from_zip/2019_02_07/animal_1/2019_02_07_animal_1.mp4']
+videofile_path = ['crush_videos_from_zip/2019_02_07/animal_3/2019_02_07_animal_3.mp4']
+
 
 deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
 
