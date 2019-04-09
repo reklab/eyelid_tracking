@@ -1,8 +1,28 @@
 # Eyelid Tracking
 Codes for eye_lid tracking application developed in Guy Tsor's master's thesis.
-Github @guyts.
+[Github @guyts](https://github.com/guyts).
 
 The code in this library contains two very different approaches to eyelid tracking - one (implemented in MATLAB) uses the active contour algorithm to track contours throuhout a video, while the other (implemented in Python) uses a transfer learning framework (DeepLabCut 2) to train a classifier to track the eye in a video recording.
+
+# METHOD 1: Traditional Image Processing Using Active Contours
+
+One of two options available to run this method, either from a MATLAB command line or using the executable. 
+
+Notes on the requirements to make the program work properly:
+
+* Both methods are using single frames, reading one frame at a time, rather than processing the entire video. In case you only have the video, there is an option during set up to convert the video to single frames.
+* Both methods assume frame type is .jpeg
+* Both methods can handle any file name, however the frame number must be indicated at the very end, just before the suffix (example: 'video-rec-january-1005.jpg' is a valid file name, compared to '1005-video-rec-january.jpg')
+
+In case where your system has slightly different set up, making minor adjustments to the MATLAB files can be easily done to fit different file types or naming conventions.
+
+The executable option should be used in case no MATLAB is set up on your system, or if your recording system is similar to that described above and in the [relevant paper](https://www.researchgate.net/publication/328984007_Eyelid_and_Blink_Tracking_in_an_Animal_Model_of_Facial_Palsy).
+
+
+## Run .exe file
+
+Install the package available here.
+
 
 # DeepLabCut installation and setup on a Windows 10 environment
 
