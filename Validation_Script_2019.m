@@ -189,16 +189,18 @@ uiopen('load');
 %% NEW: 
 fr_range = validation_output_mat{2};
 fr_range_sig = fr_range/2;
-t = 1/fps:2/fps:2*length(signal_output_mat{1,1})/fps;
+fps = 500;
 
-t_sig = 1/fps:2/fps:2*length(signal_output_mat{1,1})/fps;
+t = 1/fps:2/fps:2*length(signal_output_mat{1,1})/fps;
+t_sig = t(fr_range_sig(1):fr_range_sig(2));
+t = 1/fps:1/fps:2*length(signal_output_mat{1,1})/fps;
 t_val = t(fr_range(1):fr_range(2));
 
-eyeSig = signal_output_mat{1,1}(fr_range(1):fr_range(2));
+eyeSig = signal_output_mat{1,1}(fr_range_sig(1):fr_range_sig(2));
 eyeSigVal = validation_output_mat{1}(fr_range(1):fr_range(2));
 
-plot(t_rel,eyeSig);hold on;
-scatter(t_rel,eyeSigVal);
+plot(t_sig,eyeSig);hold on;
+scatter(t_val(1:end-1),eyeSigVal);
 
 %% OLD : In case it's part of the new recording system (TIFF + 500fps)
 
