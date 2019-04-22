@@ -69,6 +69,8 @@ def calc_euc(x1,y1,x2,y2):
 ## FOLLOWING SECTION HANDLES A SINGLE EYE VIDEOS
 
 filename = 'an3_vid2_150fpsDeepCut_resnet50_LookingJan18shuffle1_400000.csv'
+filename = '2019_01_09_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+
 
 df = pd.read_csv(filename)
 
@@ -78,12 +80,14 @@ df = df.iloc[2:].reset_index(drop=True)
 df = df.apply(pd.to_numeric)
 
 # relevant coordinates dataframe
-df = df.drop(['eye-top-point_x', 'eye-top-point_y',
-       'eye-top-point_likelihood', 'eye-bottom-point_x', 'eye-bottom-point_y',
-       'eye-bottom-point_likelihood'], axis=1)
+df = df.drop(['left-eye-top_x', 'left-eye-top_y',
+       'left-eye-top_likelihood', 'right-eye-top_x', 'right-eye-top_y',
+       'right-eye-top_likelihood'], axis=1)
 
 # generate minor axis length:
 minor_axis = minor_length(df)
+minor_L = minor_axis[0]
+minor_R = minor_axis[1]
 
 # plotting (using seaborn)
 frames = df.bodyparts_coords+1 # getting the frames 
@@ -92,7 +96,8 @@ fps = 500
 # input into a single dataframe
 d = {'frame': frames,
      'time': frames/fps,
-     'minor_axis': minor_axis, 
+     'minor_L': minor_L,
+     'minor_R': minor_R
      }
 output_df = pd.DataFrame(d)
 
