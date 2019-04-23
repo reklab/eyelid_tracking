@@ -29,7 +29,7 @@ def plot_double_output(df):
     sns.lineplot('time','minor_axis_L',data=df,ax=axes[0])
     sns.lineplot('time','minor_axis_R',data=df,ax=axes[1])
     
-    axes[0].set_title("Left Eye Output", fontsize=2)
+    axes[0].set_title("Left Eye Output", fontsize=20)
     axes[1].set_title("Right Eye Output", fontsize=20)
     axes[0].set_xlabel("Time [seconds]", fontsize=16)
     axes[1].set_xlabel("Time [seconds]", fontsize=16)
