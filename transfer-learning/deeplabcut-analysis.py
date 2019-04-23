@@ -80,14 +80,12 @@ df = df.iloc[2:].reset_index(drop=True)
 df = df.apply(pd.to_numeric)
 
 # relevant coordinates dataframe
-df = df.drop(['left-eye-top_x', 'left-eye-top_y',
-       'left-eye-top_likelihood', 'right-eye-top_x', 'right-eye-top_y',
-       'right-eye-top_likelihood'], axis=1)
+df = df.drop(['eye-top-point_x', 'eye-top-point_y',
+       'eye-top-point_likelihood', 'eye-bottom-point_x', 'eye-bottom-point_y',
+       'eye-bottom-point_likelihood'], axis=1)
 
 # generate minor axis length:
 minor_axis = minor_length(df)
-minor_L = minor_axis[0]
-minor_R = minor_axis[1]
 
 # plotting (using seaborn)
 frames = df.bodyparts_coords+1 # getting the frames 
@@ -96,8 +94,7 @@ fps = 500
 # input into a single dataframe
 d = {'frame': frames,
      'time': frames/fps,
-     'minor_L': minor_L,
-     'minor_R': minor_R
+     'minor_axis': minor_axis, 
      }
 output_df = pd.DataFrame(d)
 
@@ -107,6 +104,20 @@ plot_single_output(output_df)
 
 filename1 = 'animal_3_video_2_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv'
 filename2 = 'march_8_animal_1_video_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv' 
+filename2 = '2019_02_07_animal_4DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv' 
+filename2 = '2019_01_14_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_14_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_17_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_17_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_22_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_22_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_28_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_28_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_3DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_6DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+
 
 df = pd.read_csv(filename2)
 
@@ -131,7 +142,6 @@ d = {'frame': frames,
 output_df = pd.DataFrame(d)
 
 plot_double_output(output_df)
-
 
 ## IMPORTING OLD DATA TO SUPERIMPOSE FOR COMPARISON
 
