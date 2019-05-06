@@ -29,7 +29,7 @@ def plot_double_output(df):
     sns.lineplot('time','minor_axis_L',data=df,ax=axes[0])
     sns.lineplot('time','minor_axis_R',data=df,ax=axes[1])
     
-    axes[0].set_title("Left Eye Output", fontsize=2)
+    axes[0].set_title("Left Eye Output", fontsize=20)
     axes[1].set_title("Right Eye Output", fontsize=20)
     axes[0].set_xlabel("Time [seconds]", fontsize=16)
     axes[1].set_xlabel("Time [seconds]", fontsize=16)
@@ -69,6 +69,8 @@ def calc_euc(x1,y1,x2,y2):
 ## FOLLOWING SECTION HANDLES A SINGLE EYE VIDEOS
 
 filename = 'an3_vid2_150fpsDeepCut_resnet50_LookingJan18shuffle1_400000.csv'
+filename = '2019_01_09_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+
 
 df = pd.read_csv(filename)
 
@@ -102,6 +104,20 @@ plot_single_output(output_df)
 
 filename1 = 'animal_3_video_2_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv'
 filename2 = 'march_8_animal_1_video_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv' 
+filename2 = '2019_02_07_animal_4DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv' 
+filename2 = '2019_01_14_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_14_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_17_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_17_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_22_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_22_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_28_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_28_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_3DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_02_07_animal_6_downsDeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+
 
 df = pd.read_csv(filename2)
 
@@ -126,7 +142,6 @@ d = {'frame': frames,
 output_df = pd.DataFrame(d)
 
 plot_double_output(output_df)
-
 
 ## IMPORTING OLD DATA TO SUPERIMPOSE FOR COMPARISON
 
