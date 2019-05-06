@@ -63,6 +63,7 @@ color = 'RGB';
 suffix = 'jpg';
 right_left=1;
 fname = 'J7A1R';
+fname = 'J17A2R';
 fname = 'F7A4R';
 
 
@@ -95,11 +96,11 @@ close all;
 
 % setting start frame and end frame:
 
-begin_time = 61;
-end_time = 62.5;
+begin_time = 19;
+end_time = 24;
 
-begin_fr = begin_time*fps;
-end_fr = end_time*fps;
+begin_fr = begin_time*fps*2;
+end_fr = end_time*fps*2;
 
 % Setting up variable
 eyeSigVal = zeros(1,end_fr-begin_fr+1);
