@@ -5,6 +5,8 @@ Created on Mon Jan 21 14:38:29 2019
 @author: gtsror
 """
 
+# This file works well as of April 2019
+
 # Reading the output data into python using h5
 
 import pandas as pd
