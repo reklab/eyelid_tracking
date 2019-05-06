@@ -23,6 +23,21 @@ The executable option should be used in case no MATLAB is set up on your system,
 
 Install the package available here.
 
+## Using the command line
+
+Set up parameter file using init_param.csv file. The parameters required are as follows:
+* roi_need - leave as 0 in most cases. Change to 1 only in case you have set the ROI already in previous runs of the program.
+* fps - default is 500. This is the recording frame rate. Please note that by default, the program downsamples the videos 2:1.
+* vid_yn - leave as 0 if you don't need a video export; change to 1 if you do (note - video generation increases runtime exponentially. Use this in initial runs to validate that the results are as you expected).
+* color - default is RGB. You may change to 'GS' in case your recording is in black and white.
+* suffix - default is set to 'jpg'. Change to appropriate suffix based on your recording apparatus (jpeg, JPG, JPEG). Case sensitive.
+* right_left - when running on animal's right side, mark as 1; when running on animal's left side, mark as 2.
+* fname - set an output file name as desired.
+
+Open MATLAB.
+Launch the main file __name here__ 
+
+
 
 # DeepLabCut installation and setup on a Windows 10 environment
 
