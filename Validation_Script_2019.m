@@ -63,8 +63,8 @@ color = 'RGB';
 suffix = 'jpg';
 right_left=1;
 fname = 'J7A1R';
-fname = 'J17A2R';
-fname = 'F7A4R';
+%fname = 'J17A2R';
+%fname = 'F7A4R';
 
 
 % folder = uigetdir('C:\','Select jpeg folder containing frames:');
@@ -161,15 +161,15 @@ close(v)
 
 fr_range = [begin_fr, end_fr];
 
-validation_output_mat = cell(3,1);
+validation_output_mat = cell(4,1);
 validation_output_mat{1} = eyeSigVal;
 validation_output_mat{2} = fr_range;
 % validation_output_mat{3} = ctrSigX;
 % validation_output_mat{4} = ctrSigY;
 % validation_output_mat{5} = angleSig;
 % validation_output_mat{6} = i;
-% validation_output_mat{7} = find(angleSig~=0);
 validation_output_mat{3} = fname;
+validation_output_mat{4} = find(eyeSigVal~=0);
 
 if right_left == 1
     % meaning, running on right eye
@@ -191,346 +191,62 @@ uiopen('load');
 fr_range = validation_output_mat{2};
 fr_range_sig = fr_range/2;
 fps = 500;
+rel_frms = validation_output_mat{4};
 
 t = 1/fps:2/fps:2*length(signal_output_mat{1,1})/fps;
 t_sig = t(fr_range_sig(1):fr_range_sig(2));
 t = 1/fps:1/fps:2*length(signal_output_mat{1,1})/fps;
-t_val = t(fr_range(1):fr_range(2));
+t_val = t(fr_range(1):length(validation_output_mat{1}));
 
 eyeSig = signal_output_mat{1,1}(fr_range_sig(1):fr_range_sig(2));
 eyeSigVal = validation_output_mat{1}(fr_range(1):fr_range(2));
 
 plot(t_sig,eyeSig);hold on;
-scatter(t_val(1:end-1),eyeSigVal);
-
-%% OLD : In case it's part of the new recording system (TIFF + 500fps)
-
-eyeSig = signal_output_mat{1,1};
-eyeSigVal = validation_output_mat{1}(1:end-1);
-areaSig = signal_output_mat{2,1};
-areaSigVal = validation_output_mat{2}(1:end-1);
-relFrms = validation_output_mat{7};
-frames = length(eyeSigVal);
-fps = 500;
-t_sig = 1/fps:2/fps:2*length(eyeSig)/fps;
-t_val = 1/fps:1/fps:(frames*1/fps);
-% tval = validation_output_mat{7}/fps;
-actualsVal = relFrms(end);
-actualsSig = length(eyeSig);
-
-% Zero padding actual signal to match lengths:
-eyeSig0s = kron(eyeSig, [1 0]);
-areaSig0s = kron(areaSig, [1 0]);
-ctrX0s = kron(signal_output_mat{3,1}{1}, [1 0]);
-ctrY0s = kron(signal_output_mat{3,1}{2}, [1 0]);
-
-% equalizing both validation an automatic signals based on lengths
-lendiff = length(eyeSigVal)-length(eyeSig0s);
-eyeSigVal = eyeSigVal(1:end-lendiff);
-areaSigVal = areaSigVal(1:end-lendiff);
-ctrXvals = validation_output_mat{3}(1:frames-lendiff);
-ctrYvals = validation_output_mat{4}(1:frames-lendiff);
-
-% Finding center differences:
-ctrDifXSig = ctrXvals - ctrX0s;
-ctrDifYSig = ctrYvals - ctrY0s;
-
-% AT THIS POINT THE SIGNALS AND VALIDATION WERE MATCHED ELEMENT-by-ELEMENT
-
-%% cutting out endings if desired:
-percentout = 10/100;
-eyeSig0s = eyeSig0s(1:end-percentout*frames);
-areaSig0s = areaSig0s(1:end-percentout*frames);
-eyeSigVal = eyeSigVal(1:end-percentout*frames);
-areaSigVal = areaSigVal(1:end-percentout*frames);
-ctrDifXSig = ctrDifXSig(1:end-percentout*frames);
-ctrDifYSig = ctrDifYSig(1:end-percentout*frames);
-relFrms(relFrms>(1-percentout)*frames)=[];
-%% We may now look at relevant frames only:
-t2 = t_val(relFrms);
-
-eyeSig_rel = eyeSig0s(relFrms);
-areaSig_rel = areaSig0s(relFrms);
-eyeSigVal_rel = eyeSigVal(relFrms);
-areaSigVal_rel = areaSigVal(relFrms);
-ctrDifXSig = ctrDifXSig(relFrms);
-ctrDifYSig = ctrDifYSig(relFrms);
-
-% % The relevant parts of the signals exclude the parts after the NaNs of the
-% % validation signal
-%
-% areaSig = areaSig(1:actualsSig-1);
-% areaSigVal = areaSigVal(1:actualsVal);
-% eyeSig = eyeSig(1:actualsSig-1);
-% eyeSigVal = eyeSigVal(1:actualsVal);
-% t = t(1:actuals);
-
-% to solve the 0s relevant frames problem: interpolating
-
-%% In case it's part of the old system (240fps)
-
-%% if it's not TIFF version (240fps):
-
-eyeSig = signal_output_mat{1,1};
-areaSig = signal_output_mat{2,1};
-eyeSigVal = validation_output_mat{1};
-areaSigVal = validation_output_mat{2}(1:end-1);
-relFrms = validation_output_mat{7};
-frames = length(eyeSigVal);
-eyeSig_rel = eyeSig(relFrms);
-areaSig_rel = areaSig(relFrms);
-eyeSigVal_rel = eyeSigVal(relFrms);
-areaSigVal_rel = areaSigVal(relFrms);
-
-fps=240;
-t = 1/fps:1/fps:(frames*1/fps);
-t2 = t(relFrms);
-%% if its red or edge:
-
-eyeSig = eyeSig{1};
-eyeSigVal = validation_output_mat{1};
-relFrms = validation_output_mat{7};
-frames = length(eyeSigVal);
-eyeSig_rel = eyeSig(relFrms);
-eyeSigVal_rel = eyeSigVal(relFrms);
-
-fps=240;
-t = 1/fps:1/fps:(frames*1/fps);
-t2 = t(relFrms);
-
-%% error calculations:
-
-rmse_minor = sqrt(sum((eyeSig_rel(:)-eyeSigVal_rel(:)).^2)/numel(eyeSig_rel));
-rmse_area = sqrt(sum((areaSig_rel(:)-areaSigVal_rel(:)).^2)/numel(areaSig_rel));
-
-
-for i = 1:numel(areaSig_rel)
-    err_minor(i) = (eyeSig_rel(i)-eyeSigVal_rel(i))/eyeSigVal_rel(i);
-    err_area(i) = (areaSig_rel(i)-areaSigVal_rel(i))/areaSigVal_rel(i);
-end
-
-mean(err_minor)
-std(err_minor)
-mean(err_area)
-std(err_area)
-%% New analysis dashboard - no VAF
-mdl = fitlm(eyeSig_rel,eyeSigVal_rel);
-r2 = mdl.Rsquared.Ordinary;
-[r_xy,lag] = correl_sigs(eyeSig_rel(:),eyeSigVal_rel(:),fps,0);
-
-figure()
-
-% Actual signals on top of each other:
-subplot (3,2,[1 2])
-plot(t2,eyeSig_rel,'color','b','linewidth',0.9);
-hold on;
-scatter(t2,eyeSigVal_rel,40,'.','r');
+scatter(t_val(1:end),eyeSigVal(fr_range(1):length(eyeSigVal)),'.');
+hold off
+ylim([1, [max([eyeSigVal, eyeSig])+1]]);
+xlim([min(t_val),max(t_val)]);
 grid on;
-xlim([0 t2(end)]);
-ylim([2 1.1*max([max(eyeSig),max(eyeSigVal)])]);
-ylabel('Pixels');
-legend('Algorithm Output','Validation Data');
-% set(gca,'Fontsize',14,'fontname','Times New Roman')
-grid on; title('A) Output Signal and Validation Points');
-hold off;
+title(['DLC output vs. manual validtion', fname])
+xlabel('Time [sec]'); ylabel('Eye width [pixels]');
 
-resid = eyeSig_rel-eyeSigVal_rel;
-subplot (3,2,[3 4])
-plot(t2,resid,'color','k','linewidth',0.7);
-xlim([0 t2(end)]);
-grid on; title('B) Residuals');
-ylim([min(resid)-5 max(resid)+5]);
-ylabel('Pixels');
-xlabel('Time [sec]');
-
-subplot 325
-plot(lag, r_xy); grid on; %set(gca,'fontsize',16)
-ylabel('Correlation'); xlabel('Lag [sec]'); xlim([min(lag) max(lag)]);
-grid on; hold on;
-% text(0.1,0.1,['R^2 = ' num2str(r2)])
-title('C) Output/Validation cross-correlation');
-
-
-
-%% Analysis -- old 1
+%% determining stats NEW:
+eyeSigVal_rel = eyeSigVal(rel_frms);
+eyeSig_rel = signal_output_mat{1,1};
+eyeSig_rel = eyeSig_rel(ceil(rel_frms/2));
 
 rmse = sqrt(sum((eyeSig_rel(:)-eyeSigVal_rel(:)).^2)/numel(eyeSig_rel));
 mdl = fitlm(eyeSig_rel,eyeSigVal_rel);
 r2 = mdl.Rsquared.Ordinary;
 
-subplot 211
-plot(t2,eyeSig_rel,'color','b','linewidth',0.9);
-hold on;
-scatter(t2,eyeSigVal_rel,40,'.','r');
-grid on;
-xlim([0 t2(end)]);
-ylim([2 1.1*max([max(eyeSig),max(eyeSigVal)])]);
-ylabel('Minor Axis Length [Pixels]');
-xlabel('Time [sec]');
-title('Minor Axis Signal')
-legend('Algorithm Output','Validation Data');
-% set(gca,'Fontsize',14,'fontname','Times New Roman')
-hold off;
-
-% residuals:
-resid = eyeSig_rel-eyeSigVal_rel;
-subplot 212
-plot(t2,resid,'color','k','linewidth',0.9);
-grid on;
-xlim([0 t2(end)]);
-ylim([-30 30]);
-ylabel('Residuals [Pixels]');
-xlabel('Time [sec]');
-
-subplot 212
-plot(t2,areaSig_rel,'color','b','linewidth',0.9);
-hold on;
-scatter(t2,areaSigVal_rel,40,'.','r');
-grid on;
-xlim([0 t2(end)]);
-ylim([200 1.1*max([max(areaSig),max(areaSigVal)])]);
-ylabel('Eye Area [Pixels]');
-xlabel('Time [sec]');
-title('Eye Area Signals');
-legend('Algorithm Output','Validation Data');
-hold off;
-
-subplot 313
-scatter(t2,ctrDifXSig,25,'d','c');
-hold on; grid on;
-scatter(t2,ctrDifYSig,25,'d','m');
-xlabel('Time [sec]');
-ylabel('Difference [Pixels]')
-legend('X Axis','Y Axis');
-xlim([0 t2(end)]);
-title('Center Coordinate Differences');
-
-%% Filtering and processing pre analysis
-
-%% Median filter to the algorithm signal
-eyeSig_filt_M = medfilt1(eyeSig_rel,5);
-plot(t_sig,eyeSig); hold on;
-plot(t2,eyeSig_rel);
-plot(t2,eyeSig_filt_M);
-legend('Original','Relevant','Relevant Filtered')
-%% Low pass filtering
-
-d = fdesign.lowpass('Fp,Fst,Ap,Ast',0.1,0.2,0.1,40);
-lpf = design(d,'equiripple');
-fvtool(lpf)
-eyeSig_filt_LP = filter(lpf,eyeSig);
-plot(eyeSig); hold on; plot(eyeSig_filt_LP);
-
-% seems like there's a 19 frames lag
-%% taking the relevant frames (padding 0s and taking rel)
-eyeSig_filt0s = kron(eyeSig_filt_LP, [1 0]);
-eyeSig_filt_rel = eyeSig_filt0s(relFrms);
-%% Finding coherence between the two:
-
-cohere = mscohere(eyeSig_rel,eyeSigVal_rel);
-plot(cohere)
-%% Analysis---old
-
-% subplot 311
-% plot(t_sig,eyeSig,'color','b','linewidth',0.9);
-% hold on;
-% scatter(t_val,eyeSigVal,40,'.','r');
-% grid on;
-% xlim([0 t(relFrms(end))]);
-% ylim([2 1.1*max([max(eyeSig),max(eyeSigVal)])]);
-% ylabel('Minor Axis Length [Pixels]');
-% xlabel('Time [sec]');
-% title('Minor Axis Signal')
-% legend('Algorithm Output','Validation Data');
-% % set(gca,'Fontsize',14,'fontname','Times New Roman')
-% hold off;
-%
-% subplot 312
-% plot(t_sig,areaSig,'color','b','linewidth',0.9);
-% hold on;
-% scatter(t_val,areaSigVal,40,'.','r');
-% grid on;
-% xlim([0 t(relFrms(end))]);
-% ylim([200 1.1*max([max(areaSig),max(areaSigVal)])]);
-% ylabel('Eye Area [Pixels]');
-% xlabel('Time [sec]');
-% title('Eye Area Signals');
-% legend('Algorithm Output','Validation Data');
-% hold off;
-%
-% subplot 313
-% scatter(t2,ctrDifXSig,25,'d','c');
-% hold on; grid on;
-% scatter(t2,ctrDifYSig,25,'d','m');
-% xlabel('Time [sec]');
-% ylabel('Difference [Pixels]')
-% legend('X Axis','Y Axis');
-% xlim([0 t(relFrms(end))]);
-% title('Center Coordinate Differences');
+% IRFing
+x = nldat(eyeSig_rel');
+x.domainIncr = 1/fps;
+v = nldat(eyeSigVal_rel');
+v.domainIncr = 1/fps;
 
 
-%% Accuracy and statistics analysis
-
-% Interpolating the missing values from the validation signal
-% eyeSigVal_interp = interp1(t2,eyeSigVal(relFrms),t_sig);
-% areaSigVal_interp = interp1(t2,areaSigVal(relFrms),t_sig);
-% Getting the data to be the same length as the validation data:
-% areaSigRel = areaSig0s(relFrms);
-% eyeSigRel = eyeSig0s(relFrms);
-option =2 ;
-% Minor axis analysis:
-[r_minor_xy,r2_minor,irff_minor,VAF_minor] = stats_analysis(t2,eyeSig_rel,eyeSigVal_rel, fps,option);
-disp(['VAF was: ' num2str(max(VAF_minor)) '%']);
-
-[r_area_xy,r2_area,irff_area,VAF_area] = stats_analysis(t2,areaSig_rel,areaSigVal_rel, fps,option);
-disp(['VAF was: ' num2str(max(VAF_area)) '%']);
-
-[r_minor_xy,r2_minor,irff_minor,VAF_minor] = stats_analysis(t2(100:end),eyeSig_filt_rel(100:end),eyeSigVal_rel(100:end), fps);
-
-% Area analysis:
-% [r_area_xy,r2_area,irff_area,VAF_area] = stats_analysis(t,areaSig,areaSigVal(relFrms), fps);
-
-%% Plotting area vs minor axis choice
-% using 6400t1_2018_2, right
-
-subplot 221
-plot(t2,eyeSig_rel,'color','b','linewidth',0.9);
-hold on;
-scatter(t2,eyeSigVal_rel,40,'.','r');
-grid on;
-xlim([0 t2(end)]);
-ylim([2 1.1*max([max(eyeSig),max(eyeSigVal)])]);
-ylabel('Minor Axis Length [Pixels]');
-xlabel('Time [sec]');
-title('A) Minor Axis Signal')
-legend('Algorithm Output','Validation Data');
-hold off;
-
-subplot 222
-plot(t2,areaSig_rel,'color','b','linewidth',0.9);
-hold on;
-scatter(t2,areaSigVal_rel,40,'.','r');
-grid on;
-xlim([0 t2(end)]);
-ylim([200 1.1*max([max(areaSig),max(areaSigVal)])]);
-ylabel('Eye Area [Pixels]');
-xlabel('Time [sec]');
-title('B) Eye Area Signals');
-legend('Algorithm Output','Validation Data');
-hold off;
-
-subplot 223
+% VAFing
+vafx = cell(1,200); j=0;
+for ii = 5:5:1000
+    j = j+1;
+    irf2= irf(cat(2,v,x),'nLags',ii,'nSides',2);
+    x_pred = nlsim(irf2,v);
+    vafx{j} = vaf(x_pred,x);
+    disp(['Finished ' num2str(j) ' runs']);
+end
+for i=1:200
+    VAFsig(i) = vafx{i}.dataSet;
+end
+[~, lagind] = max(VAFsig);
 ii = 5:5:1000;
-plot(ii,VAF_minor);
-grid on;
-ylabel('VAF [%]');
-xlabel('Number of Lags');
-title('C) Minor Axis VAF');
+nLags = ii(lagind);
+%cat(2,input,output)
+irff= irf(cat(2,v,x),'nLags',nLags,'nSides',2);
 
-subplot 224
 ii = 5:5:1000;
-plot(ii,VAF_area);
+plot(ii,VAFsig);
 grid on;
+xlabel('Number of lags');
 ylabel('VAF [%]');
-xlabel('Number of Lags');
-title('D) Eye Area VAF');
+title('Variance Accounted For');
