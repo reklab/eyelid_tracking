@@ -27,6 +27,8 @@ deeplabcut.create_new_project(task,sides,training_videos, working_directory='dlc
 
 %matplotlib inline
 path_config_file = '/dlc-blinking/an3_vid2_full/eyes_only-Guy-gpu-2019-01-29/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
+path_config_file = '/dlc-blinking/blinking-lr-2019-02-07/config.yaml' # Enter the path of the config file that was just created from the above step (check the folder)
+
 deeplabcut.extract_frames(path_config_file,'automatic','uniform'),crop=True, checkcropping=True) #there are other ways to grab frames, such as by clustering 'kmeans'; please see the paper. 
 
 # changed the cropping dimensions in the config.yaml file
@@ -48,11 +50,13 @@ deeplabcut.train_network(path_config_file)
 deeplabcut.evaluate_network(path_config_file)
 
 # Analyzing video
-videofile_path = ['crush_videos_from_zip/2019_02_07/animal_1/2019_02_07_animal_1.mp4']
+videofile_path = ['crush_videos_from_zip/2019_02_07/animal_6/2019_02_07_animal_6_downs.mp4']
+videofile_path = ['crush_videos_from_zip/2019_02_07/animal_4/2019_02_07_animal_4.mp4']
+
 
 deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
 
-deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_02_07\\\\animal_1\\2019_02_07_animal_1.mp4'], save_frames=True)
+deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_02_07\\\\animal_6\\2019_02_07_animal_6_downs.mp4'], save_frames=True)
 
 %matplotlib notebook #for making interactive plots.
 deeplabcut.plot_trajectories(path_config_file,videofile_path)

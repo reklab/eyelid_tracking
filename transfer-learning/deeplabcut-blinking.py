@@ -103,7 +103,7 @@ deeplabcut.analyze_videos(path_config_file,videofile_path,save_as_csv=True)
 
 deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2_full\\eyes_only-Guy-2019-01-25\\videos\\crush_19_01_07_animal_3.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\dlc-blinking\\an3_vid2_full\\eyes_only-Guy-2019-01-25\\videos\\march_8_animal_1_video_150fps_correct.mp4'], save_frames=True)
-deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_02_07\\\\animal_2\\2019_02_07_animal_2.mp4'], save_frames=True)
+deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_02_07\\\\animal_2\\2019_02_07_animal_2.mp4'], save_frames=False)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_17\\\\animal_2\\2019_01_17_animal_2.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_17\\\\animal_1\\2019_01_17_animal_1.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_22\\\\animal_1\\2019_01_22_animal_1.mp4'], save_frames=True)
@@ -117,6 +117,7 @@ deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_09\\\\animal_1\\2019_01_09_animal_1.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_14\\\\animal_1\\2019_01_14_animal_1.mp4'], save_frames=True)
 deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_01_14\\\\animal_2\\2019_01_14_animal_2.mp4'], save_frames=True)
+deeplabcut.create_labeled_video(path_config_file, ['D:\\crush_videos_from_zip\\2019_02_07\\\\animal_6\\2019_02_07_animal_6_downs.mp4'], save_frames=False)
 
 
 
