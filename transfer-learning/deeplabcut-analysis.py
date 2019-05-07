@@ -107,6 +107,13 @@ plot_single_output(output_df)
 filename1 = 'animal_3_video_2_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv'
 filename2 = 'march_8_animal_1_video_150fps_correctDeepCut_resnet50_eyes_onlyJan25shuffle1_350000.csv' 
 filename2 = '2019_01_07_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_07_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_07_animal_3DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_07_animal_4DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_07_animal_6DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_09_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+filename2 = '2019_01_09_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
+
 filename2 = '2019_02_07_animal_4DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv' 
 filename2 = '2019_01_14_animal_1DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
 filename2 = '2019_01_14_animal_2DeepCut_resnet50_blinkingFeb7shuffle1_360000.csv'
@@ -144,9 +151,9 @@ d = {'frame': frames,
      }
 output_df = pd.DataFrame(d)
 
-output_df.to_csv(filename2[0:19]+'_dlc.csv',index=False,)
-
 plot_double_output(output_df)
+
+output_df.to_csv(filename2[0:19]+'_dlc.csv',index=False)
 
 ## VALIDATION ANALYSIS FOR SECTIONS OF VIDEOS
 
