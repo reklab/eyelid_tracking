@@ -3,14 +3,14 @@
     <param.appname>Eyelid_Tracking</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.2</param.version>
+    <param.version>1.3</param.version>
     <param.authnamewatermark>Guy Tsror</param.authnamewatermark>
     <param.email>guy.tsror@mail.mcgill.ca</param.email>
     <param.company>McGill University</param.company>
     <param.summary>This application allows tracking and measurement of eyelid movement or eye-openness acquired via video recordings.</param.summary>
     <param.description>Using the active contour method, this application takes user input describing the initial location of eye edges, and tracks the movement of eyelids throughout the video.
 The application can produce output signals describing eyelid movement, and videos displaying the tracked contours on the eye.</param.description>
-    <param.screenshot />
+    <param.screenshot>C:\Users\gtsror\Desktop\logo.png</param.screenshot>
     <param.guid />
     <param.installpath.string>\Eyelid_Tracking\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
@@ -37,7 +37,6 @@ The application can produce output signals describing eyelid movement, and video
     <unset>
       <param.icon />
       <param.icons />
-      <param.screenshot />
       <param.guid />
       <param.installpath.combo />
       <param.logo />
@@ -63,10 +62,14 @@ The application can produce output signals describing eyelid movement, and video
     <fileset.main>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eyelid_tracking_gui.m</file>
     </fileset.main>
-    <fileset.resources />
+    <fileset.resources>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\button_press.m</file>
+    </fileset.resources>
     <fileset.package />
     <fileset.depfun>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track_parallel.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track_single.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\extract_ellipse.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eye_edge.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eye_edge_gs.m</file>
