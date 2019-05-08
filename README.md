@@ -2,11 +2,13 @@
 Codes for eye_lid tracking application developed in Guy Tsor's master's thesis.
 [Github @guyts](https://github.com/guyts).
 
+For any questions, please don't hesitate reaching out at _guy.tsror@mail.mcgill.ca_.
+
 The code in this library contains two very different approaches to eyelid tracking - one (implemented in MATLAB) uses the active contour algorithm to track contours throuhout a video, while the other (implemented in Python) uses a transfer learning framework (DeepLabCut 2) to train a classifier to track the eye in a video recording.
 
 # METHOD 1: Traditional Image Processing Using Active Contours
 
-One of two options available to run this method, either from a MATLAB command line or using the executable. 
+One of two options available to run this method, either from a MATLAB command line or using the executable installer located [here] (https://github.com/reklab/eyelid_tracking/tree/master/gui-setup/Eyelid_Tracking/for_redistribution). 
 
 Notes on the requirements to make the program work properly:
 
@@ -21,7 +23,7 @@ The executable option should be used in case no MATLAB is set up on your system,
 
 ## Run .exe file
 
-Install the package available here.
+Install the package [available here](https://github.com/reklab/eyelid_tracking/tree/master/gui-setup/Eyelid_Tracking/for_redistribution).
 
 ## Using the command line
 
@@ -35,7 +37,7 @@ Set up parameter file using init_param.csv file. The parameters required are as 
 * fname - set an output file name as desired.
 
 Open MATLAB.
-Launch the main file __name here__ 
+Launch the main file __track_no_gui.m__ and run from your MATLAB environment.
 
 
 
@@ -104,3 +106,11 @@ In this case, simply use `pip install PACKAGENAME==VER.SION` to install the vers
 
 This will install a version that is compatiable with DLC.
 
+# Running DLC-based tracking
+
+To run tracking using transfer learning and the DLC library, launch one of the following files, depending on your needs:
+- for CPU usage, use _deeplabcut-blinking.py_
+- for GPU usage, use _deeplabcut-blinking-GPU.py_
+- for analysis, use _deeplabcut-analysis.py_
+
+Please note that in case recording was done in high frame rate (>300hz), you may downsample using _downsample_folder.py_.
