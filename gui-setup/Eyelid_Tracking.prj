@@ -3,7 +3,7 @@
     <param.appname>Eyelid_Tracking</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.3</param.version>
+    <param.version>1.4</param.version>
     <param.authnamewatermark>Guy Tsror</param.authnamewatermark>
     <param.email>guy.tsror@mail.mcgill.ca</param.email>
     <param.company>McGill University</param.company>
@@ -60,30 +60,32 @@ The application can produce output signals describing eyelid movement, and video
       <param.log.file />
     </unset>
     <fileset.main>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eyelid_tracking_gui.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui_v0.m</file>
     </fileset.main>
     <fileset.resources>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\button_press.m</file>
     </fileset.resources>
     <fileset.package />
     <fileset.depfun>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track_parallel.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\contour_track_single.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\extract_ellipse.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eye_edge.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\eye_edge_gs.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\init_partition.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\mark_blinks.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\naninterp.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\contour_track.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\contour_track_parallel.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\contour_track_single.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\extract_ellipse.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\eye_edge.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\eye_edge_gs.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\eye_sketch.jpg</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\eyelid_tracking_gui.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\init_partition.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\mark_blinks.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\naninterp.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\parfor_progressbar.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\plot_ellipse.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\relevant_eye.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\relevant_eye_gs.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\sortJPEGs2.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\sortStruct.m</file>
+      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\tiff2jpg.m</file>
       <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\nestedSortStruct.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\parfor_progressbar.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\plot_ellipse.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\relevant_eye.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\relevant_eye_gs.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortJPEGs2.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\sortStruct.m</file>
-      <file>D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\Work\tiff2jpg.m</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}\Eyelid_Tracking\for_testing" name="Eyelid_Tracking.exe" optional="false">D:\Guy\OneDrive\Important Docs\School MSc\McGill\Thesis\Facial Reanimation\MATLAB files\eyelid-tracking\eyelid_tracking\gui-setup\Eyelid_Tracking\for_testing\Eyelid_Tracking.exe</file>
