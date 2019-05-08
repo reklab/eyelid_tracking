@@ -38,23 +38,7 @@ end
 % Init_YDXJ122_L{3} = HSVRanges;
 % save([filename '_L_Sqr'], 'Init_YDXJ122_L')
 
-%% OPTION 1: OLD - do not use - lOADING for validation run
-load march_8_animal_1_video_3_init_L
-load animal_3_video_2_init_L
-load animal_1_video_1b_init_L
-
-
-prevX = firstFrameInput{2,1};
-prevY = firstFrameInput{2,2};
-HSVrange = firstFrameInput{3,2};
-rect = firstFrameInput{1,2};
-eyeSig = zeros(1,frames);
-areaSig = zeros(1,frames);
-ctrSigX = zeros(1,frames);
-ctrSigY = zeros(1,frames);
-angleSig = zeros(1,frames);
-
-%% OPTION 2: DEFINING FOR VALIDATION RUN
+%% OPTION: DEFINING FOR VALIDATION RUN
 
 roi_is = 0;
 fps = 500;
@@ -62,9 +46,9 @@ vid_yn = 1;
 color = 'RGB';
 suffix = 'jpg';
 right_left=1;
-fname = 'J7A1R';
+% fname = 'J7A1R';
 %fname = 'J17A2R';
-%fname = 'F7A4R';
+fname = 'F7A4R';
 
 
 % folder = uigetdir('C:\','Select jpeg folder containing frames:');
@@ -96,11 +80,11 @@ close all;
 
 % setting start frame and end frame:
 
-begin_time = 19;
-end_time = 24;
+begin_time = 61;%19
+end_time = 63.5;%24
 
-begin_fr = begin_time*fps*2;
-end_fr = end_time*fps*2;
+begin_fr = begin_time*fps;
+end_fr = end_time*fps;
 
 % Setting up variable
 eyeSigVal = zeros(1,end_fr-begin_fr+1);
@@ -199,7 +183,7 @@ t = 1/fps:1/fps:2*length(signal_output_mat{1,1})/fps;
 t_val = t(fr_range(1):length(validation_output_mat{1}));
 
 eyeSig = signal_output_mat{1,1}(fr_range_sig(1):fr_range_sig(2));
-eyeSigVal = validation_output_mat{1}(fr_range(1):fr_range(2));
+eyeSigVal = validation_output_mat{1};%(fr_range(1):fr_range(2));
 
 plot(t_sig,eyeSig);hold on;
 scatter(t_val(1:end),eyeSigVal(fr_range(1):length(eyeSigVal)),'.');
@@ -214,6 +198,9 @@ xlabel('Time [sec]'); ylabel('Eye width [pixels]');
 eyeSigVal_rel = eyeSigVal(rel_frms);
 eyeSig_rel = signal_output_mat{1,1};
 eyeSig_rel = eyeSig_rel(ceil(rel_frms/2));
+
+eyeSig_rel = eyeSig_rel-mean(eyeSig_rel);
+eyeSigVal_rel = eyeSigVal_rel-mean(eyeSigVal_rel);
 
 rmse = sqrt(sum((eyeSig_rel(:)-eyeSigVal_rel(:)).^2)/numel(eyeSig_rel));
 mdl = fitlm(eyeSig_rel,eyeSigVal_rel);
